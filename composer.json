@@ -1,0 +1,43 @@
+{
+    "name": "toolreport/core",
+    "description": "PDF Designer for Laravel — template management, layout engine, dual PDF rendering (DomPDF + Composite TCPDF)",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "pdf", "designer", "templates", "tcpdf", "dompdf", "report", "layout"],
+    "homepage": "https://github.com/toolreport/core",
+    "support": {
+        "issues": "https://github.com/toolreport/core/issues",
+        "source": "https://github.com/toolreport/core"
+    },
+    "require": {
+        "php": "^8.3",
+        "barryvdh/laravel-dompdf": "^3.0",
+        "tecnickcom/tc-lib-pdf": "^8"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^11.0",
+        "laravel/framework": "^13.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Toolreport\\Core\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Toolreport\\Core\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Toolreport\\Core\\ToolreportCoreServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "prefer-stable": true
+}

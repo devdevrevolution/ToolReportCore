@@ -1,0 +1,113 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Toolreport\Core;
+
+use Illuminate\Support\ServiceProvider;
+use Toolreport\Core\Console\Commands\PdfDesignerInstallCommand;
+use Toolreport\Core\Layout\LayoutEngine;
+use Toolreport\Core\Layout\Renderers\BarcodeElementRenderer;
+use Toolreport\Core\Layout\Renderers\ContainerElementRenderer;
+use Toolreport\Core\Layout\Renderers\ImageElementRenderer;
+use Toolreport\Core\Layout\Renderers\LineElementRenderer;
+use Toolreport\Core\Layout\Renderers\PageNumberElementRenderer;
+use Toolreport\Core\Layout\Renderers\RectangleElementRenderer;
+use Toolreport\Core\Layout\Renderers\TableElementRenderer;
+use Toolreport\Core\Layout\Renderers\TextElementRenderer;
+use Toolreport\Core\Pdf\EngineSelector;
+use Toolreport\Core\Pdf\PdfGenerator;
+use Toolreport\Core\Modules\PdfEngine\Engine\ReportCompiler;
+
+class ToolreportCoreServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/pdf-designer.php', 'pdf-designer');
+
+        $this->app->singleton(LayoutEngine::class, function () {
+            $engine = new LayoutEngine();
+            $engine->registerRenderers([
+                app(TextElementRenderer::class),
+                app(ImageElementRenderer::class),
+                app(TableElementRenderer::class),
+                app(LineElementRenderer::class),
+                app(RectangleElementRenderer::class),
+                app(BarcodeElementRenderer::class),
+                app(PageNumberElementRenderer::class),
+                app(ContainerElementRenderer::class),
+            ]);
+
+            return $engine;
+        });
+
+        $this->app->singleton(PdfGenerator::class);
+
+        $this->app->singleton(EngineSelector::class);
+
+        // ── PDF Engine (Composite-pattern tc-lib-pdf renderer) ──
+
+        // Force Tcpdf to use cURL for remote image fetching.
+        // Without this, File::getUrlData() skips cURL when allow_url_fopen=1
+        // and falls back to file_get_contents(), which can't read remote URLs.
+        if (! defined('FORCE_CURL')) {
+            define('FORCE_CURL', true);
+        }
+
+        $this->app->singleton(ReportCompiler::class, function () {
+            $debug = (bool) config('pdf-designer.debug', false);
+            $fileOptions = config('pdf-designer.pdf-engine.fileOptions', []);
+            return new ReportCompiler(debug: $debug, fileOptions: $fileOptions);
+        });
+    }
+
+    public function boot(): void
+    {
+        // Config
+        $this->publishes([
+            __DIR__.'/../config/pdf-designer.php' => config_path('pdf-designer.php'),
+        ], 'pdf-designer-config');
+
+        // Migrations
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'pdf-designer-migrations');
+
+        // Routes
+        if (file_exists(__DIR__.'/../routes/api.php')) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        }
+
+        // Commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                PdfDesignerInstallCommand::class,
+            ]);
+        }
+
+        // PDF Engine font path
+        $this->configurePdfEngineFontPath();
+    }
+
+    private function configurePdfEngineFontPath(): void
+    {
+        if (defined('K_PATH_FONTS')) {
+            return;
+        }
+
+        // Try the data-core package first (installed via composer or build)
+        $dataCorePath = base_path('vendor/tecnickcom/tc-lib-pdf-font/target/fonts/core');
+        if (is_dir($dataCorePath)) {
+            define('K_PATH_FONTS', $dataCorePath);
+            return;
+        }
+
+        // Fallback: look in the parent target/fonts directory
+        $vendorFontPath = base_path('vendor/tecnickcom/tc-lib-pdf-font/target/fonts');
+        if (is_dir($vendorFontPath)) {
+            define('K_PATH_FONTS', $vendorFontPath);
+        }
+    }
+}
