@@ -2,6 +2,11 @@
 
 All notable changes to `toolreport/core` will be documented in this file.
 
+## v0.1.4 — 2026-07-19
+
+### Fixed
+- Font path used `dirname(__DIR__, 2)` which went up two levels from `src/` to `vendor/toolreport/` instead of the package root `vendor/toolreport/core/`. Changed to `dirname(__DIR__)` (one level up).
+
 ## v0.1.3 — 2026-07-19
 
 ### Fixed

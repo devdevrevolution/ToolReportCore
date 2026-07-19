@@ -115,10 +115,10 @@ class ToolreportCoreServiceProvider extends ServiceProvider
         }
 
         // 1. Try the bundled core fonts (shipped with this package)
-        // Use dirname() twice instead of __DIR__.'/../fonts/core' to avoid
+        // Use dirname() once to go from src/ to the package root, avoiding
         // double-dots ('..') in the path — tc-lib-file's security check
         // rejects paths containing '..' (hasDoubleDots).
-        $bundledCorePath = dirname(__DIR__, 2).'/fonts/core';
+        $bundledCorePath = dirname(__DIR__).'/fonts/core';
         if (is_dir($bundledCorePath)) {
             define('K_PATH_FONTS', $bundledCorePath);
             return;
