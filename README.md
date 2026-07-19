@@ -47,33 +47,42 @@ php artisan pdf-designer:install --with-assets
 
 ### Vite Configuration
 
-You **must** add the designer entry point to your `vite.config.ts`. Without this, you'll get `Unable to locate file in Vite manifest`:
+Add the designer entry point and `@` alias to your `vite.config.ts`:
 
 ```ts
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
+import { fileURLToPath } from 'url'
 
 export default defineConfig({
     plugins: [
         laravel({
             input: [
                 'resources/css/app.css',
-                'vendor/toolreport/core/designer/src/main.ts', // <-- add this
+                'vendor/toolreport/core/designer/src/main.ts',
             ],
             refresh: true,
         }),
         vue(),
         tailwindcss(),
     ],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(
+                new URL('./vendor/toolreport/core/designer/src', import.meta.url),
+            ),
+        },
+    },
 })
 ```
 
-Then make sure `vue` and `@vitejs/plugin-vue` are installed in your app:
+### Install Dependencies
 
 ```bash
 npm install -D vue @vitejs/plugin-vue
+npm install pinia axios vue-router
 ```
 
 ### Build
