@@ -1,0 +1,33 @@
+<template>
+    <label class="block text-xs text-gray-500">
+        {{ label }}
+        <input type="number" v-model="model" :min="min" :step="step" class="input mt-0.5" />
+    </label>
+</template>
+
+<script setup lang="ts">
+const model = defineModel<number | undefined>()
+
+defineProps<{
+    label: string
+    min?: number
+    step?: number
+}>()
+</script>
+
+<style scoped>
+.input {
+    display: block;
+    width: 100%;
+    border-radius: 0.25rem;
+    border: 1px solid #d1d5db;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+.input:focus {
+    border-color: #3b82f6;
+    outline: 1px solid #3b82f6;
+    outline-offset: -1px;
+}
+</style>
