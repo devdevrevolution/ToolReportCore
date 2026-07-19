@@ -248,7 +248,7 @@ class Shape implements Component
             return $graph->getRoundedRect($cx, $cy, $w, $h, $rad, $rad, '1111', $mode, $style);
         }
 
-        return $graph->getRect($cx, $cy, $w, $h, $mode, $style);
+        return $graph->getRect($cx, $cy, $w, $h, $mode, ['all' => $style]);
     }
 
     private function buildEllipse(object $graph, float $cx, float $cy, array $style, string $mode): string

@@ -278,11 +278,33 @@ class ShapeTest extends TestCase
         $graph->expects($this->once())
             ->method('getRect')
             ->with(10.0, 20.0, 80.0, 40.0, 'FD', $this->callback(function (array $style): bool {
-                return isset($style['fillColor']) && $style['fillColor'] === '#00FF00';
+                return isset($style['all']['fillColor']) && $style['all']['fillColor'] === '#00FF00';
             }))
             ->willReturn('r ');
 
+        $page->expects($this->once())
+            ->method('addContent')
+            ->with('q r  Q');
+
         $shape->render($pdf, 10.0, 20.0);
+    }
+
+    #[Test]
+    public function render_filled_rect_emits_fill_color_in_real_pdf_stream(): void
+    {
+        $shape = new Shape('rect');
+        $shape->setWidth(80);
+        $shape->setHeight(40);
+        $shape->setFillColor('#00FF00');
+
+        $pdf = new Tcpdf('mm', true, false, false, '', null, []);
+        $pdf->addPage();
+        $pdf->page->enableAutoPageBreak(false);
+
+        $shape->render($pdf, 10.0, 20.0);
+
+        $pdfString = $pdf->getOutPDFString();
+        $this->assertStringContainsString('0.000000 1.000000 0.000000 rg', $pdfString);
     }
 
     // ── Render: rounded rect ──
@@ -458,7 +480,7 @@ class ShapeTest extends TestCase
             ->method('getRect')
             ->with($this->anything(), $this->anything(), $this->anything(), $this->anything(), 'FD',
                 $this->callback(function (array $style): bool {
-                    return isset($style['fillColor']) && $style['fillColor'] === '#00FF00';
+                    return isset($style['all']['fillColor']) && $style['all']['fillColor'] === '#00FF00';
                 })
             )
             ->willReturn('r ');

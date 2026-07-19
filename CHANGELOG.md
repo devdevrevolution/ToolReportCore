@@ -2,6 +2,20 @@
 
 All notable changes to `toolreport/core` will be documented in this file.
 
+## v0.1.5 — 2026-07-19
+
+### Added
+- Spanish documentation (`docs/es.md`) — paso a paso para desarrolladores, arquitectura, instalación, primitivas del designer composite, bandas estilo iReport, datasources REST/JSON, sistema de expresiones con filtros, matriz comparativa de soporte entre `dompdf` y `pdf-engine` (verificada contra el código fuente).
+- Enlace a la documentación en español desde el `README.md`.
+
+### Fixed
+- `Shape::buildRect()` (motor `pdf-engine`) pasaba `$style` directamente a `getRect()`, pero TCPDF espera el envoltorio `['all' => $style]`. Ahora el rect relleno aplica `fillColor` y `strokeColor` correctamente.
+- Nombre de la ruta del designer (`/pdf-designer/{templateId?}`) cambiado de `pdf-designer.index` a `pdf-designer` para que coincida con el helper `route('pdf-designer')` usado en otros lugares.
+- Test de `Shape` actualizado para verificar el envoltorio `['all' => $style]` y agregado un test que valida que el fill color aparece en el stream real del PDF (`0.000000 1.000000 0.000000 rg`).
+
+### Changed
+- `CompositeCanvas.vue` — normalización de indentación (4 → 2 espacios). Sin cambios funcionales.
+
 ## v0.1.4 — 2026-07-19
 
 ### Fixed

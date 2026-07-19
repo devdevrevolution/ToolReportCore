@@ -93,7 +93,7 @@ class ToolreportCoreServiceProvider extends ServiceProvider
         if (! $this->app->runningInConsole()) {
             Route::get('/pdf-designer/{templateId?}', function () {
                 return view('pdf-designer::pdf-designer');
-            })->name('pdf-designer.index');
+            })->name('pdf-designer');
         }
 
         // Commands

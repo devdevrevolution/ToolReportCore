@@ -1,5 +1,7 @@
 # ToolReport Core
 
+[📖 Documentación en Español](docs/es.md) · [English docs below](#requirements)
+
 PDF Designer for Laravel — template management, visual layout engine, and dual PDF rendering (DomPDF + TCPDF composite engine).
 
 ## Requirements
