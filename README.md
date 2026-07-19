@@ -85,6 +85,14 @@ npm install -D vue @vitejs/plugin-vue
 npm install pinia axios vue-router
 ```
 
+### Tailwind v4
+
+Tell Tailwind to scan the designer source files. Add this line to your `resources/css/app.css`:
+
+```css
+@source "../../vendor/toolreport/core/designer/src/**/*.{vue,ts,js}";
+```
+
 ### Build
 
 ```bash

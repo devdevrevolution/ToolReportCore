@@ -2,6 +2,19 @@
 
 All notable changes to `toolreport/core` will be documented in this file.
 
+## v0.1.2 — 2026-07-19
+
+### Added
+- Bundled Core14 fonts in `fonts/core/` (14 JSON files, 156KB)
+- Fonts: courier, courierb, courierbi, courieri, helvetica, helveticab, helveticabi, helveticai, symbol, times, timesb, timesbi, timesi, zapfdingbats
+
+### Changed
+- Font loading now checks bundled fonts first, then vendor, then parent target
+- README updated with Tailwind v4 `@source` directive for designer files
+
+### Fixed
+- TCPDF composite engine font resolution — `tc-lib-pdf-font` doesn't ship pre-built JSON fonts, now bundled
+
 ## v0.1.1 — 2026-07-19
 
 ### Added

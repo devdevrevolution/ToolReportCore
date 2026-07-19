@@ -112,14 +112,21 @@ class ToolreportCoreServiceProvider extends ServiceProvider
             return;
         }
 
-        // Try the data-core package first (installed via composer or build)
+        // 1. Try the bundled core fonts (shipped with this package)
+        $bundledCorePath = __DIR__.'/../fonts/core';
+        if (is_dir($bundledCorePath)) {
+            define('K_PATH_FONTS', $bundledCorePath);
+            return;
+        }
+
+        // 2. Try the data-core package (installed via composer or build)
         $dataCorePath = base_path('vendor/tecnickcom/tc-lib-pdf-font/target/fonts/core');
         if (is_dir($dataCorePath)) {
             define('K_PATH_FONTS', $dataCorePath);
             return;
         }
 
-        // Fallback: look in the parent target/fonts directory
+        // 3. Fallback: look in the parent target/fonts directory
         $vendorFontPath = base_path('vendor/tecnickcom/tc-lib-pdf-font/target/fonts');
         if (is_dir($vendorFontPath)) {
             define('K_PATH_FONTS', $vendorFontPath);
