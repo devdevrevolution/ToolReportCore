@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Toolreport\Core;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Toolreport\Core\Console\Commands\PdfDesignerInstallCommand;
 use Toolreport\Core\Layout\LayoutEngine;
@@ -78,6 +79,20 @@ class ToolreportCoreServiceProvider extends ServiceProvider
         // Routes
         if (file_exists(__DIR__.'/../routes/api.php')) {
             $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        }
+
+        // ── Designer Frontend ──
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'pdf-designer');
+
+        $this->publishes([
+            __DIR__.'/../resources/views' => resource_path('views/vendor/pdf-designer'),
+        ], 'pdf-designer-views');
+
+        // Web route for the designer (only when not running in console)
+        if (! $this->app->runningInConsole()) {
+            Route::get('/pdf-designer/{templateId?}', function () {
+                return view('pdf-designer::pdf-designer');
+            })->name('pdf-designer.index');
         }
 
         // Commands

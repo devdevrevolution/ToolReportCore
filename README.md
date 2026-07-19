@@ -31,6 +31,53 @@ php artisan vendor:publish --tag=pdf-designer-config
 php artisan vendor:publish --tag=pdf-designer-migrations
 ```
 
+## PDF Designer
+
+The visual designer is a Vue 3 application included in the package. After installing the PHP package, build and configure the frontend:
+
+### Setup
+
+```bash
+# Install the package
+composer require toolreport/core
+
+# Run the installer (publishes config, migrations, and views)
+php artisan pdf-designer:install --with-assets
+```
+
+### Vite Configuration
+
+Add the designer entry point to your `vite.config.ts`:
+
+```ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+    plugins: [vue(), tailwindcss()],
+    // ... rest of your config
+})
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Access
+
+Navigate to `http://your-app.com/pdf-designer`
+
+### Customizing the View
+
+Publish the Blade view to customize it:
+
+```bash
+php artisan vendor:publish --tag=pdf-designer-views
+```
+
+This publishes `resources/views/vendor/pdf-designer/pdf-designer.blade.php` to your app.
+
 ## Configuration
 
 After publishing, edit `config/pdf-designer.php`:

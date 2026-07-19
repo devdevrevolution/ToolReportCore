@@ -36,6 +36,12 @@ class PdfDesignerInstallCommand extends Command
                 '--force' => $this->option('force'),
             ]);
             $this->info('✓ Designer assets published');
+
+            $this->call('vendor:publish', [
+                '--tag' => 'pdf-designer-views',
+                '--force' => $this->option('force'),
+            ]);
+            $this->info('✓ Designer views published');
         }
 
         $this->info('PDF Designer installed successfully!');
