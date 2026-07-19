@@ -2,6 +2,14 @@
 
 All notable changes to `toolreport/core` will be documented in this file.
 
+## v0.1.3 — 2026-07-19
+
+### Fixed
+- Font path resolution — `__DIR__.'/../fonts/core'` contained `..` which `tc-lib-file` rejects as a security measure. Changed to `dirname(__DIR__, 2).'/fonts/core'`.
+
+### Added
+- `pdf-designer:generate-fonts` artisan command — downloads Core14 AFM files from Adobe and converts them to JSON
+
 ## v0.1.2 — 2026-07-19
 
 ### Added

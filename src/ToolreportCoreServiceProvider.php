@@ -6,6 +6,7 @@ namespace Toolreport\Core;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Toolreport\Core\Console\Commands\GenerateCoreFontsCommand;
 use Toolreport\Core\Console\Commands\PdfDesignerInstallCommand;
 use Toolreport\Core\Layout\LayoutEngine;
 use Toolreport\Core\Layout\Renderers\BarcodeElementRenderer;
@@ -99,6 +100,7 @@ class ToolreportCoreServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 PdfDesignerInstallCommand::class,
+                GenerateCoreFontsCommand::class,
             ]);
         }
 
@@ -113,7 +115,10 @@ class ToolreportCoreServiceProvider extends ServiceProvider
         }
 
         // 1. Try the bundled core fonts (shipped with this package)
-        $bundledCorePath = __DIR__.'/../fonts/core';
+        // Use dirname() twice instead of __DIR__.'/../fonts/core' to avoid
+        // double-dots ('..') in the path — tc-lib-file's security check
+        // rejects paths containing '..' (hasDoubleDots).
+        $bundledCorePath = dirname(__DIR__, 2).'/fonts/core';
         if (is_dir($bundledCorePath)) {
             define('K_PATH_FONTS', $bundledCorePath);
             return;
