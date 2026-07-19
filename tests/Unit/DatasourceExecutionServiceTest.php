@@ -7,6 +7,7 @@ namespace Toolreport\Core\Tests\Unit;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Toolreport\Core\Services\DatasourceExecutionService;
+use Toolreport\Core\Services\TemplateVarService;
 use Toolreport\Core\Tests\TestCase;
 
 class DatasourceExecutionServiceTest extends TestCase
@@ -17,7 +18,7 @@ class DatasourceExecutionServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = new DatasourceExecutionService();
+        $this->service = new DatasourceExecutionService(new TemplateVarService());
     }
 
     #[Test]

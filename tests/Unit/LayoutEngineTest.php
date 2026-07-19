@@ -47,7 +47,7 @@ class LayoutEngineTest extends TestCase
                 'orientation' => 'portrait',
                 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10],
             ],
-            'elements' => [
+            'children' => [
                 [
                     'type' => 'text',
                     'x' => 20, 'y' => 20, 'width' => 170, 'height' => 15,
@@ -72,7 +72,7 @@ class LayoutEngineTest extends TestCase
     {
         $config = [
             'page' => ['width' => 210, 'height' => 297, 'orientation' => 'portrait', 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10]],
-            'elements' => [
+            'children' => [
                 [
                     'type' => 'text',
                     'x' => 20, 'y' => 20, 'width' => 170, 'height' => 15,
@@ -95,7 +95,7 @@ class LayoutEngineTest extends TestCase
     {
         $config = [
             'page' => ['width' => 210, 'height' => 297, 'orientation' => 'portrait', 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10]],
-            'elements' => [
+            'children' => [
                 [
                     'type' => 'text',
                     'x' => 20, 'y' => 20, 'width' => 170, 'height' => 15,
@@ -131,7 +131,7 @@ class LayoutEngineTest extends TestCase
 
         $config = [
             'page' => ['width' => 210, 'height' => 297, 'orientation' => 'portrait', 'margins' => []],
-            'elements' => [
+            'children' => [
                 ['type' => 'invalid_type', 'x' => 0, 'y' => 0, 'width' => 10, 'height' => 10, 'content' => []],
             ],
         ];
@@ -144,7 +144,7 @@ class LayoutEngineTest extends TestCase
     {
         $config = [
             'page' => ['width' => 210, 'height' => 297, 'orientation' => 'portrait', 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10]],
-            'elements' => [
+            'children' => [
                 ['type' => 'text', 'x' => 10, 'y' => 10, 'width' => 100, 'height' => 20, 'content' => ['text' => 'Title'], 'styles' => ['fontSize' => 18]],
                 ['type' => 'line', 'x' => 10, 'y' => 35, 'width' => 180, 'height' => 1, 'styles' => ['color' => '#000']],
                 ['type' => 'text', 'x' => 10, 'y' => 45, 'width' => 100, 'height' => 15, 'content' => ['text' => 'Body'], 'styles' => []],
@@ -163,7 +163,7 @@ class LayoutEngineTest extends TestCase
     {
         $config = [
             'page' => ['width' => 210, 'height' => 297, 'orientation' => 'portrait', 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10]],
-            'elements' => [
+            'children' => [
                 [
                     'type' => 'table',
                     'x' => 20, 'y' => 50, 'width' => 170, 'height' => 80,
@@ -193,7 +193,7 @@ class LayoutEngineTest extends TestCase
     {
         $config = [
             'page' => ['width' => 210, 'height' => 297, 'orientation' => 'portrait', 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10]],
-            'elements' => [
+            'children' => [
                 [
                     'type' => 'table',
                     'x' => 20, 'y' => 50, 'width' => 170, 'height' => 80,
@@ -244,7 +244,7 @@ class LayoutEngineTest extends TestCase
                         'anchor' => 'fill',
                         'height' => 50,
                         'collectionPath' => 'orders',
-                        'elements' => [
+                        'children' => [
                             [
                                 'type' => 'table',
                                 'x' => 10, 'y' => 5,
@@ -322,7 +322,7 @@ class LayoutEngineTest extends TestCase
                         'height' => 15,
                         'collectionPath' => null,
                         'datasourceId' => 'ds-1',
-                        'elements' => [
+                        'children' => [
                             [
                                 'type' => 'text',
                                 'x' => 10, 'y' => 5,
@@ -365,7 +365,7 @@ class LayoutEngineTest extends TestCase
                         'label' => 'Detail',
                         'height' => 15,
                         'collectionPath' => '',
-                        'elements' => [
+                        'children' => [
                             [
                                 'type' => 'text',
                                 'x' => 10, 'y' => 5,
@@ -407,7 +407,7 @@ class LayoutEngineTest extends TestCase
                         'label' => 'Detail',
                         'height' => 15,
                         'collectionPath' => 'results',
-                        'elements' => [
+                        'children' => [
                             [
                                 'type' => 'text',
                                 'x' => 10, 'y' => 5,
@@ -451,7 +451,7 @@ class LayoutEngineTest extends TestCase
                         'anchor' => 'top',
                         'label' => 'Header',
                         'height' => 20,
-                        'elements' => [
+                        'children' => [
                             [
                                 'type' => 'text',
                                 'x' => 10, 'y' => 5,
@@ -468,7 +468,7 @@ class LayoutEngineTest extends TestCase
                         'label' => 'Detail',
                         'height' => 15,
                         'collectionPath' => '',
-                        'elements' => [
+                        'children' => [
                             [
                                 'type' => 'text',
                                 'x' => 10, 'y' => 5,

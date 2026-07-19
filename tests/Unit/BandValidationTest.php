@@ -42,8 +42,8 @@ class BandValidationTest extends TestCase
         $config = $this->baseConfig();
         // Printable area = 297 - 10 - 10 = 277mm
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 200, 'elements' => []],
-            ['type' => 'detail', 'height' => 100, 'elements' => []],
+            ['type' => 'header', 'height' => 200, 'children' => []],
+            ['type' => 'detail', 'height' => 100, 'children' => []],
         ];
 
         $this->expectException(InvalidLayoutException::class);
@@ -58,7 +58,7 @@ class BandValidationTest extends TestCase
         $config = $this->baseConfig();
         // 300mm total, 277mm printable, 23mm overflow
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 300, 'elements' => []],
+            ['type' => 'header', 'height' => 300, 'children' => []],
         ];
 
         try {
@@ -77,11 +77,11 @@ class BandValidationTest extends TestCase
         $config = $this->baseConfig();
         // Printable area = 277mm, bands total = 60mm
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 30, 'elements' => [
+            ['type' => 'header', 'height' => 30, 'children' => [
                 ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Header'], 'styles' => []],
             ]],
-            ['type' => 'detail', 'height' => 10, 'elements' => []],
-            ['type' => 'footer', 'height' => 20, 'elements' => [
+            ['type' => 'detail', 'height' => 10, 'children' => []],
+            ['type' => 'footer', 'height' => 20, 'children' => [
                 ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 10, 'content' => ['text' => 'Footer'], 'styles' => []],
             ]],
         ];
@@ -97,7 +97,7 @@ class BandValidationTest extends TestCase
         $config = $this->baseConfig();
         // Printable area = 277mm, bands total = 277mm
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 277, 'elements' => []],
+            ['type' => 'header', 'height' => 277, 'children' => []],
         ];
 
         // Should not throw — exact fit
@@ -110,7 +110,7 @@ class BandValidationTest extends TestCase
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [
-            ['type' => 'detail', 'height' => -5, 'elements' => []],
+            ['type' => 'detail', 'height' => -5, 'children' => []],
         ];
 
         $this->expectException(InvalidLayoutException::class);
@@ -124,7 +124,7 @@ class BandValidationTest extends TestCase
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 0, 'elements' => []],
+            ['type' => 'header', 'height' => 0, 'children' => []],
         ];
 
         $this->expectException(InvalidLayoutException::class);
@@ -138,7 +138,7 @@ class BandValidationTest extends TestCase
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [
-            ['type' => 'header', 'elements' => []],
+            ['type' => 'header', 'children' => []],
         ];
 
         $this->expectException(InvalidLayoutException::class);
@@ -152,7 +152,7 @@ class BandValidationTest extends TestCase
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 'abc', 'elements' => []],
+            ['type' => 'header', 'height' => 'abc', 'children' => []],
         ];
 
         $this->expectException(InvalidLayoutException::class);
@@ -166,8 +166,8 @@ class BandValidationTest extends TestCase
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 30, 'elements' => []],
-            ['type' => 'detail', 'height' => -5, 'elements' => []],
+            ['type' => 'header', 'height' => 30, 'children' => []],
+            ['type' => 'detail', 'height' => -5, 'children' => []],
         ];
 
         try {
@@ -189,7 +189,7 @@ class BandValidationTest extends TestCase
                 'orientation' => 'portrait',
                 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10],
             ],
-            'elements' => [
+            'children' => [
                 ['type' => 'text', 'x' => 10, 'y' => 10, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Hello'], 'styles' => []],
             ],
         ];
@@ -204,7 +204,7 @@ class BandValidationTest extends TestCase
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [];
-        $config['elements'] = [
+        $config['children'] = [
             ['type' => 'text', 'x' => 10, 'y' => 10, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Hello'], 'styles' => []],
         ];
 
@@ -228,7 +228,7 @@ class BandValidationTest extends TestCase
         // Printable area = 297 - 25 - 20 = 252mm
         // Bands total = 260mm → should throw overflow
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 260, 'elements' => []],
+            ['type' => 'header', 'height' => 260, 'children' => []],
         ];
 
         $this->expectException(InvalidLayoutException::class);
@@ -243,9 +243,9 @@ class BandValidationTest extends TestCase
         $config = $this->baseConfig();
         // Multiple valid bands followed by an invalid one
         $config['page']['bands'] = [
-            ['type' => 'header', 'height' => 30, 'elements' => []],
-            ['type' => 'detail', 'height' => 10, 'elements' => []],
-            ['type' => 'footer', 'height' => 0, 'elements' => []],  // invalid: zero
+            ['type' => 'header', 'height' => 30, 'children' => []],
+            ['type' => 'detail', 'height' => 10, 'children' => []],
+            ['type' => 'footer', 'height' => 0, 'children' => []],  // invalid: zero
         ];
 
         $this->expectException(InvalidLayoutException::class);

@@ -58,7 +58,7 @@ class LayoutEngineBandTest extends TestCase
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 30,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 5, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Report Title'], 'styles' => []],
                 ],
             ],
@@ -88,7 +88,7 @@ class LayoutEngineBandTest extends TestCase
             [
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Page Header'], 'styles' => []],
                 ],
             ],
@@ -118,14 +118,14 @@ class LayoutEngineBandTest extends TestCase
             [
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'PH'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'columnHeader', 'type' => 'columnHeader', 'anchor' => 'top', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'CH'], 'styles' => []],
                 ],
             ],
@@ -158,7 +158,7 @@ class LayoutEngineBandTest extends TestCase
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Page Footer'], 'styles' => []],
                 ],
             ],
@@ -185,49 +185,49 @@ class LayoutEngineBandTest extends TestCase
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 5, 'width' => 190, 'height' => 10, 'content' => ['text' => 'Title'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'PH'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'columnHeader', 'type' => 'columnHeader', 'anchor' => 'top', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'CH'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 100, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'columnFooter', 'type' => 'columnFooter', 'anchor' => 'bottom', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'CF'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'PF'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'summary', 'type' => 'summary', 'anchor' => 'bottom', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 3, 'width' => 190, 'height' => 12, 'content' => ['text' => 'Summary'], 'styles' => []],
                 ],
             ],
@@ -297,7 +297,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 100, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
@@ -331,14 +331,14 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Header'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
@@ -359,14 +359,14 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Header'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'orders',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => '{{id}}'], 'styles' => []],
                 ],
             ],
@@ -387,7 +387,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 100, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
@@ -411,7 +411,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'singleItem',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Widget'], 'styles' => []],
                 ],
             ],
@@ -431,7 +431,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'orders[]',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => '{{id}}'], 'styles' => []],
                 ],
             ],
@@ -450,7 +450,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'data.orders[]',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
@@ -473,7 +473,7 @@ $result = $this->engine->render($config, $data);
                 'width' => 210, 'height' => 297, 'orientation' => 'portrait',
                 'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10],
             ],
-            'elements' => [
+            'children' => [
                 ['type' => 'text', 'x' => 10, 'y' => 10, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Flat Element'], 'styles' => []],
             ],
         ];
@@ -490,7 +490,7 @@ $result = $this->engine->render($config, $data);
     {
         $config = $this->baseConfig();
         $config['page']['bands'] = [];
-        $config['elements'] = [
+        $config['children'] = [
             ['type' => 'text', 'x' => 10, 'y' => 10, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Fallback'], 'styles' => []],
         ];
 
@@ -509,7 +509,7 @@ $result = $this->engine->render($config, $data);
             [
                 'type' => 'header',
                 'height' => 20,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'NoAnchor'], 'styles' => []],
                 ],
             ],
@@ -533,14 +533,14 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 100, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'summary', 'type' => 'summary', 'anchor' => 'bottom', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 3, 'width' => 190, 'height' => 12, 'content' => ['text' => 'Total'], 'styles' => []],
                 ],
             ],
@@ -569,21 +569,21 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Data'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'columnFooter', 'type' => 'columnFooter', 'anchor' => 'bottom', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'ColFooter'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'PageFoot'], 'styles' => []],
                 ],
             ],
@@ -616,21 +616,21 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Header'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Item'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 10, 'content' => ['text' => 'Footer'], 'styles' => []],
                 ],
             ],
@@ -657,7 +657,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 25,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 5, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Title'], 'styles' => []],
                 ],
             ],
@@ -681,7 +681,7 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 100, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
@@ -715,14 +715,14 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'PH'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'PF'], 'styles' => []],
                 ],
             ],
@@ -749,28 +749,28 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 10, 'content' => ['text' => 'Title'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 100, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'columnFooter', 'type' => 'columnFooter', 'anchor' => 'bottom', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => 'ColFooter'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'summary', 'type' => 'summary', 'anchor' => 'bottom', 'height' => 15,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 10, 'content' => ['text' => 'Summary'], 'styles' => []],
                 ],
             ],
@@ -809,21 +809,21 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Header'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => '{{name}}'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Footer'], 'styles' => []],
                 ],
             ],
@@ -863,21 +863,21 @@ $result = $this->engine->render($config, $data);
             [
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 15,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 0, 'y' => 0, 'width' => 210, 'height' => 12, 'content' => ['text' => 'HEADER'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'datasourceId' => null, 'collectionPath' => 'items',
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 0, 'y' => 0, 'width' => 210, 'height' => 8, 'content' => ['text' => '{{label}}'], 'styles' => []],
                 ],
             ],
             [
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 15,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 0, 'y' => 0, 'width' => 210, 'height' => 12, 'content' => ['text' => 'FOOTER'], 'styles' => []],
                 ],
             ],
@@ -918,7 +918,7 @@ $result = $this->engine->render($config, $data);
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'enabled' => true,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Visible Title'], 'styles' => []],
                 ],
             ],
@@ -926,7 +926,7 @@ $result = $this->engine->render($config, $data);
                 'id' => 'pageHeader', 'type' => 'pageHeader', 'anchor' => 'top', 'height' => 12,
                 'enabled' => false,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 2, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Hidden Header'], 'styles' => []],
                 ],
             ],
@@ -934,7 +934,7 @@ $result = $this->engine->render($config, $data);
                 'id' => 'detail', 'type' => 'detail', 'anchor' => 'fill', 'height' => 10,
                 'enabled' => true,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Visible Detail'], 'styles' => []],
                 ],
             ],
@@ -960,7 +960,7 @@ $result = $this->engine->render($config, $data);
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 'enabled' => true,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Title'], 'styles' => []],
                 ],
             ],
@@ -968,7 +968,7 @@ $result = $this->engine->render($config, $data);
                 'id' => 'pageFooter', 'type' => 'pageFooter', 'anchor' => 'bottom', 'height' => 12,
                 'enabled' => false,
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 1, 'width' => 190, 'height' => 8, 'content' => ['text' => 'Hidden Footer'], 'styles' => []],
                 ],
             ],
@@ -993,7 +993,7 @@ $result = $this->engine->render($config, $data);
                 'id' => 'title', 'type' => 'title', 'anchor' => 'top', 'height' => 20,
                 // No 'enabled' key — should default to true
                 'datasourceId' => null, 'collectionPath' => null,
-                'elements' => [
+                'children' => [
                     ['type' => 'text', 'x' => 10, 'y' => 0, 'width' => 190, 'height' => 15, 'content' => ['text' => 'Default Enabled'], 'styles' => []],
                 ],
             ],

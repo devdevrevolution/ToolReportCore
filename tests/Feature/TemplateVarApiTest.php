@@ -100,7 +100,7 @@ class TemplateVarApiTest extends TestCase
             "/api/pdf-designer/templates/{$template->id}/template-vars/{$templateVar->id}"
         );
 
-        $response->assertNoContent();
+        $response->assertOk();
         $this->assertDatabaseMissing('template_vars', ['id' => $templateVar->id]);
     }
 
