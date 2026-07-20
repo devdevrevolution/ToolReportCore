@@ -17,6 +17,7 @@
                     'hover:bg-blue-50 cursor-grab': isDraggable(node) && !onNodeClick,
                     'cursor-pointer hover:bg-blue-50': isDraggable(node) && !!onNodeClick,
                     'cursor-default': !isDraggable(node),
+                    'bg-amber-50 border-l-2 border-amber-400': isCollectionField(node),
                 }"
                 :style="{ paddingLeft: depth * 16 + 8 + 'px' }"
                 @click.stop="onNodeClick?.(node)"
@@ -63,6 +64,7 @@
                 :on-field-drag-start="onFieldDragStart ?? undefined"
                 :on-field-drag-end="onFieldDragEnd ?? undefined"
                 :on-node-click="onNodeClick ?? undefined"
+                :collection-path="collectionPath"
             />
         </div>
     </div>
@@ -89,6 +91,8 @@ const props = defineProps<{
     onFieldDragEnd?: (event: DragEvent) => void
     /** Called when any selectable (non-object) node is clicked */
     onNodeClick?: (node: TreeNode) => void
+    /** The active band's collectionPath — fields matching this are highlighted */
+    collectionPath?: string | null
 }>()
 
 // ── Expand / Collapse state ───────────────────
@@ -120,6 +124,32 @@ function hasVisibleChildren(node: TreeNode): boolean {
  */
 function isDraggable(node: TreeNode): boolean {
     return node.type !== 'object'
+}
+
+/**
+ * Check if a node belongs to the active band's collection.
+ * Matches: "results[].name" when collectionPath is "results"
+ * Also matches the collection node itself ("results[]", "results")
+ */
+function isCollectionField(node: TreeNode): boolean {
+    const cp = props.collectionPath
+    if (cp === null || cp === undefined) return false
+
+    const path = node.path
+    if (cp === '') {
+        // Root-level array: match paths starting with "[]."
+        return path === '[]' || path.startsWith('[].')
+    }
+
+    // Nested collection: match "collectionPath[]" or "collectionPath" (the array node itself)
+    // and "collectionPath[].xxx" or "collectionPath.xxx" (children)
+    const normalized = cp.replace(/\[\]$/u, '')
+    return (
+        path === cp ||
+        path === normalized ||
+        path.startsWith(`${normalized}[].`) ||
+        path.startsWith(`${normalized}.`)
+    )
 }
 
 // ── Drag handlers ────────────────────────────

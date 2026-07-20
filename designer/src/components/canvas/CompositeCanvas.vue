@@ -191,15 +191,16 @@
                     color: bandColor(band.type),
                   }"
                 >
-                  {{ band.label }} hola
+                  {{ band.label }}
                 </span>
 
                 <!-- Data binding badge -->
                 <span
                   v-if="band.collectionPath"
-                  class="absolute right-1 top-0.5 rounded bg-emerald-50 px-1 text-[8px] font-semibold leading-tight text-emerald-700"
+                  class="absolute right-1 top-0.5 rounded border border-amber-400 bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold leading-tight text-amber-800 shadow-sm"
+                  :title="`Iterates: ${band.collectionPath}`"
                 >
-                  {{ band.collectionPath }}
+                  ↳ {{ band.collectionPath }}
                 </span>
 
                 <!-- Subtle band background -->
@@ -405,6 +406,31 @@ function collectionPathFromField(field: {
 }
 
 /**
+ * Normalize a raw field path relative to the band's collectionPath.
+ * "results[].name" with collectionPath "results" → "name"
+ * Mirrors DesignerCanvas.normalizeFieldPathForBand.
+ */
+function normalizeFieldPathForBand(
+  path: string,
+  collectionPath?: string | null,
+): string {
+  if (collectionPath === null || collectionPath === undefined) return path;
+
+  if (collectionPath === "") {
+    if (path.startsWith("[].")) {
+      return path.slice(3);
+    }
+    return path;
+  }
+
+  const normalizedCollection = collectionPath.replace(/\[\]$/u, "");
+  const prefixes = [`${normalizedCollection}[].`, `${normalizedCollection}.`];
+  const prefix = prefixes.find((p) => path.startsWith(p));
+
+  return prefix ? path.slice(prefix.length) : path;
+}
+
+/**
  * Find the band that contains a given composite node (root or nested).
  */
 function findBandForNode(nodeId: string): ReportBand | null {
@@ -540,24 +566,34 @@ const dropHandlers: CompositeDropHandlers = {
       | undefined;
 
     if (fieldData) {
-      // Field drop into container → create Label with {{ field.path }}
+      // Field drop into container → infer collection, then create Label with normalized path
       const field = JSON.parse(fieldData);
+
+      // Infer collectionPath on the parent band first
+      const band = findBandForNode(node.id);
+      if (band) {
+        inferCollectionForBand(band, field);
+      }
+
+      // Re-read band after infer (collectionPath may have been set)
+      const updatedBand = band
+        ? store.page.bands?.find((b) => b.id === band.id)
+        : null;
+      const normalizedPath = normalizeFieldPathForBand(
+        field.path,
+        updatedBand?.collectionPath,
+      );
+
       const newId = store.addChildCompositeNodeWithText(
         node.id,
         "Label",
-        `{{ ${field.path} }}`,
+        `{{ ${normalizedPath} }}`,
       );
       if (!newId) {
         console.warn(
           "[CompositeCanvas] Drop rejected — node is not a container:",
           node.id,
         );
-      }
-
-      // Infer collectionPath on the parent band for collection fields
-      const band = findBandForNode(node.id);
-      if (band) {
-        inferCollectionForBand(band, field);
       }
     } else if (type) {
       // Palette drop into container → existing behavior
@@ -1097,16 +1133,22 @@ function onBandDrop(e: DragEvent, bandId: string): void {
   let rootId: string;
 
   if (fieldData) {
-    // Field drop → create Label with {{ field.path }} binding
+    // Field drop → infer collection first, then create Label with normalized path
     const field = JSON.parse(fieldData);
+    inferCollectionForBand(band, field);
+
+    // Re-read band after infer (collectionPath may have been set)
+    const updatedBand = store.page.bands?.find((b) => b.id === bandId);
+    const normalizedPath = normalizeFieldPathForBand(
+      field.path,
+      updatedBand?.collectionPath,
+    );
+
     rootId = store.addCompositeNodeWithText(
       bandId,
       "Label",
-      `{{ ${field.path} }}`,
+      `{{ ${normalizedPath} }}`,
     );
-
-    // Infer collectionPath on the band for collection fields
-    inferCollectionForBand(band, field);
   } else if (type) {
     // Palette drop → existing behavior
     rootId = store.addCompositeNode(bandId, type as CompositeNodeType);

@@ -27,6 +27,7 @@
                 :type-badge-class="typeBadgeClass"
                 :on-field-drag-start="onFieldDragStart"
                 :on-field-drag-end="onFieldDragEnd"
+                :collection-path="activeCollectionPath"
             />
         </div>
     </div>
@@ -41,6 +42,18 @@ import type { TreeNode } from '@/utils/buildFieldTree'
 import TreeView from './TreeView.vue'
 
 const store = useDesignerStore()
+
+// ── Active band collection context ─────────────
+
+/**
+ * The collectionPath of the currently selected band (if it's a detail band).
+ * Used to highlight matching fields in the tree.
+ */
+const activeCollectionPath = computed<string | null>(() => {
+    const band = store.selectedBand
+    if (!band || band.type !== 'detail' || !band.collectionPath) return null
+    return band.collectionPath
+})
 
 // ── Helpers ────────────────────────────────────
 

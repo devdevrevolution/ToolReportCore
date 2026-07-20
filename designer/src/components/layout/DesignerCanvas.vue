@@ -192,10 +192,10 @@
                     <!-- Data binding badge -->
                     <span
                         v-if="band.collectionPath"
-                        class="absolute right-1 top-0.5 rounded bg-emerald-50 px-1 text-[8px] font-semibold leading-tight text-emerald-700"
-                        :title="`Bound to ${band.collectionPath}`"
+                        class="absolute right-1 top-0.5 rounded border border-amber-400 bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold leading-tight text-amber-800 shadow-sm"
+                        :title="`Iterates: ${band.collectionPath}`"
                     >
-                        {{ band.collectionPath }}
+                        ↳ {{ band.collectionPath }}
                     </span>
 
                     <!-- Subtle band background -->
@@ -1471,7 +1471,10 @@ function onDrop(e: DragEvent): void {
                 if (dropEl.type === "image") {
                     contentPatch.imageUrl = field.path;
                 } else if (dropEl.type === "text" || dropEl.type === "barcode") {
-                    contentPatch.text = field.path;
+                    const normalizedVar = contentPatch.variable as string | undefined;
+                    contentPatch.text = normalizedVar
+                        ? `{{ ${normalizedVar} }}`
+                        : field.path;
                 }
 
                 store.updateElement(dropEl.id, {
@@ -1526,7 +1529,7 @@ function onDrop(e: DragEvent): void {
                     store.updateElement(newElId, {
                         content: {
                             ...newEl.content,
-                            text: field.path,
+                            text: variable ? `{{ ${variable} }}` : field.path,
                             variable,
                         } as never,
                     });

@@ -2,6 +2,17 @@
 
 All notable changes to `toolreport/core` will be documented in this file.
 
+## v0.1.6 — 2026-07-20
+
+### Fixed
+- **CompositeCanvas field-path normalization** — when dragging a datasource field into a detail band, the Label now shows the relative path (`{{ name }}`) instead of the raw path (`{{ results[].name }}`). The band's `collectionPath` is inferred first, then the field path is normalized against it.
+- **DesignerCanvas text binding** — dropping a field onto an existing text/barcode element now wraps the variable in `{{ }}` syntax instead of storing the raw path.
+- **DesignerCanvas new element text** — new text elements created by field drops now use `{{ variable }}` format consistently.
+
+### Changed
+- **CollectionPath badge** — both `CompositeCanvas` and `DesignerCanvas` now show the detail band's collection path with an amber badge (`↳ results`) with border, shadow, and tooltip, matching across both engines.
+- **FieldsList field highlighting** — fields belonging to the active detail band's collection are highlighted with `bg-amber-50` and a left amber border in the tree view, making it easy to see which fields are bound to the current iteration.
+
 ## v0.1.5 — 2026-07-19
 
 ### Added
