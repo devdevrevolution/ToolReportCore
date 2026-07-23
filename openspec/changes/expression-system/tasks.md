@@ -136,7 +136,7 @@
 
 - [x] 12.1 Create `designer/src/components/__tests__/FunctionsModal.spec.ts` — ~5 scenarios: renders function categories, search filters functions, click emits insert, empty search shows all, keyboard navigation. Run: `cd designer && npx vitest run src/components/__tests__/FunctionsModal.spec.ts` (~80 lines)
 - [x] 12.2 Create `designer/src/components/__tests__/ExpressionEditor.spec.ts` — ~5 scenarios: renders with model value, typing updates model, insert function button opens modal, apply inserts at cursor, preview shows delimiters. Run: `cd designer && npx vitest run src/components/__tests__/ExpressionEditor.spec.ts` (~80 lines)
-- [ ] 12.3 Create `designer/src/utils/__tests__/expressionParser.spec.ts` — ~10 scenarios: tokenize simple variable, tokenize function call, parse to AST, parse concatenation, parse pipe chain, round-trip (parse → build → parse), error on unterminated string, error on mismatched parens, fast path detection. Run: `cd designer && npx vitest run src/utils/__tests__/expressionParser.spec.ts` (~120 lines)
+- [x] 12.3 Create `designer/src/utils/__tests__/expressionParser.spec.ts` — ~10 scenarios: tokenize simple variable, tokenize function call, parse to AST, parse concatenation, parse pipe chain, round-trip (parse → build → parse), error on unterminated string, error on mismatched parens, fast path detection. Run: `cd designer && npx vitest run src/utils/__tests__/expressionParser.spec.ts` (~120 lines)
 
 **Dependencies**: Phase 10, Phase 11.
 
@@ -147,7 +147,7 @@
 - [x] 13.1 Mark `src/Expression/ExpressionParser.php` as `@deprecated` — add `@deprecated Use ExpressionEvaluator instead` to class docblock. Keep file for reference. (~2 lines)
 - [x] 13.2 Mark `src/Expression/FilterRegistry.php` as `@deprecated` — add `@deprecated Use FunctionRegistry instead` to class docblock. Keep file for reference. (~2 lines)
 - [x] 13.3 Run full test suite: `vendor/bin/phpunit` (backend) + `cd designer && npx vitest run` (frontend). Verify zero failures.
-- [ ] 13.4 Performance smoke test: evaluate 1000 simple `{{ name }}` expressions via fast path vs full pipeline. Log timing to verify fast path is measurably faster.
+- [x] 13.4 Performance smoke test: evaluate 1000 simple `{{ name }}` expressions via fast path vs full pipeline. Log timing to verify fast path is measurably faster.
 
 **Dependencies**: All previous phases.
 
