@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Toolreport\Core\Expression;
 
 /**
+ * @deprecated Use ExpressionEvaluator instead. This class is kept for reference and backward compatibility.
+ *
  * Parse expression strings with concatenation and filters.
  *
  * Supports:

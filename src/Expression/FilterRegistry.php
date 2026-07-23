@@ -7,6 +7,8 @@ namespace Toolreport\Core\Expression;
 use Toolreport\Core\Expression\Filter\FilterInterface;
 
 /**
+ * @deprecated Use FunctionRegistry instead. This class is kept for reference and backward compatibility.
+ *
  * Registry of available expression filters.
  *
  * Filters are registered by name and retrieved during expression evaluation.

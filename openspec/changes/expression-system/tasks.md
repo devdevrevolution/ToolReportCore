@@ -126,7 +126,7 @@
 - [ ] 11.1 Create `designer/src/utils/functionDefinitions.ts` — `FunctionDefinition` interface with name, category, signature, description, params. All 40 functions defined (14 math + 9 text + 3 date + 2 logic + 2 formatting + 10 legacy wrapped). `FUNCTION_DEFINITIONS` array, `getFunctionDefinition()`, `getFunctionsByCategory()`. (~250 lines)
 - [ ] 11.2 Create `designer/src/components/modals/FunctionsModal.vue` — modal with search input, categorized function list, click-to-insert. Props: `modelValue?: string`. Emits: `insert(functionText: string)`. Categories: Math, Text, Date, Logic, Formatting. Search filters by name/description. (~180 lines)
 - [ ] 11.3 Create `designer/src/components/inputs/ExpressionEditor.vue` — advanced editor with raw textarea mode, syntax preview showing `{{ }}` delimiters, "Insert Function" button opening FunctionsModal. Props: `modelValue: string`, `placeholder?: string`. Emits: `update:modelValue`. (~150 lines)
-- [ ] 11.4 Modify `designer/src/components/layout/CompositeNodeProperties.vue` — use ExpressionEditor for label text input instead of plain TextInput. Wire up expression builder integration. (~30 lines changed)
+- [x] 11.4 Modify `designer/src/components/layout/CompositeNodeProperties.vue` — use ExpressionEditor for label text input instead of plain TextInput. Wire up expression builder integration. (~30 lines changed)
 
 **Dependencies**: Phase 10 (new parser types).
 
@@ -134,8 +134,8 @@
 
 ## Phase 12: Frontend Tests
 
-- [ ] 12.1 Create `designer/src/components/__tests__/FunctionsModal.spec.ts` — ~5 scenarios: renders function categories, search filters functions, click emits insert, empty search shows all, keyboard navigation. Run: `cd designer && npx vitest run src/components/__tests__/FunctionsModal.spec.ts` (~80 lines)
-- [ ] 12.2 Create `designer/src/components/__tests__/ExpressionEditor.spec.ts` — ~5 scenarios: renders with model value, typing updates model, insert function button opens modal, apply inserts at cursor, preview shows delimiters. Run: `cd designer && npx vitest run src/components/__tests__/ExpressionEditor.spec.ts` (~80 lines)
+- [x] 12.1 Create `designer/src/components/__tests__/FunctionsModal.spec.ts` — ~5 scenarios: renders function categories, search filters functions, click emits insert, empty search shows all, keyboard navigation. Run: `cd designer && npx vitest run src/components/__tests__/FunctionsModal.spec.ts` (~80 lines)
+- [x] 12.2 Create `designer/src/components/__tests__/ExpressionEditor.spec.ts` — ~5 scenarios: renders with model value, typing updates model, insert function button opens modal, apply inserts at cursor, preview shows delimiters. Run: `cd designer && npx vitest run src/components/__tests__/ExpressionEditor.spec.ts` (~80 lines)
 - [ ] 12.3 Create `designer/src/utils/__tests__/expressionParser.spec.ts` — ~10 scenarios: tokenize simple variable, tokenize function call, parse to AST, parse concatenation, parse pipe chain, round-trip (parse → build → parse), error on unterminated string, error on mismatched parens, fast path detection. Run: `cd designer && npx vitest run src/utils/__tests__/expressionParser.spec.ts` (~120 lines)
 
 **Dependencies**: Phase 10, Phase 11.
@@ -144,9 +144,9 @@
 
 ## Phase 13: Polish & Verification
 
-- [ ] 13.1 Mark `src/Expression/ExpressionParser.php` as `@deprecated` — add `@deprecated Use ExpressionEvaluator instead` to class docblock. Keep file for reference. (~2 lines)
-- [ ] 13.2 Mark `src/Expression/FilterRegistry.php` as `@deprecated` — add `@deprecated Use FunctionRegistry instead` to class docblock. Keep file for reference. (~2 lines)
-- [ ] 13.3 Run full test suite: `vendor/bin/phpunit` (backend) + `cd designer && npx vitest run` (frontend). Verify zero failures.
+- [x] 13.1 Mark `src/Expression/ExpressionParser.php` as `@deprecated` — add `@deprecated Use ExpressionEvaluator instead` to class docblock. Keep file for reference. (~2 lines)
+- [x] 13.2 Mark `src/Expression/FilterRegistry.php` as `@deprecated` — add `@deprecated Use FunctionRegistry instead` to class docblock. Keep file for reference. (~2 lines)
+- [x] 13.3 Run full test suite: `vendor/bin/phpunit` (backend) + `cd designer && npx vitest run` (frontend). Verify zero failures.
 - [ ] 13.4 Performance smoke test: evaluate 1000 simple `{{ name }}` expressions via fast path vs full pipeline. Log timing to verify fast path is measurably faster.
 
 **Dependencies**: All previous phases.

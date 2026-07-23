@@ -40,8 +40,7 @@
         <!-- Label properties -->
         <template v-else-if="node.type === 'Label'">
             <PropertyGroup title="Text">
-                <TextInput
-                    label="Content"
+                <ExpressionEditor
                     :model-value="label.text"
                     @update:model-value="update({ text: $event })"
                 />
@@ -326,6 +325,7 @@ import NumberInput from '../inputs/NumberInput.vue'
 import TextInput from '../inputs/TextInput.vue'
 import SelectInput from '../inputs/SelectInput.vue'
 import ColorInput from '../inputs/ColorInput.vue'
+import ExpressionEditor from '../inputs/ExpressionEditor.vue'
 
 const props = defineProps<{
     node: CompositeNode
