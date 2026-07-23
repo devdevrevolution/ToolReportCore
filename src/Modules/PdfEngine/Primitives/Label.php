@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Toolreport\Core\Modules\PdfEngine\Primitives;
 
 use Com\Tecnick\Pdf\Tcpdf;
+use Toolreport\Core\Expression\ExpressionEvaluator;
 use Toolreport\Core\Modules\PdfEngine\Contracts\Component;
 use Toolreport\Core\Modules\PdfEngine\Engine\FontMetrics;
 
@@ -20,6 +21,7 @@ class Label implements Component
     private ?float $max_width = null;
     private ?float $max_height = null;
     private FontMetrics $font_metrics;
+    private ?ExpressionEvaluator $expressionEvaluator = null;
 
     /** @var array<string, mixed> */
     private array $global_data = [];
@@ -111,6 +113,11 @@ class Label implements Component
         $this->local_data = $data;
     }
 
+    public function setExpressionEvaluator(ExpressionEvaluator $evaluator): void
+    {
+        $this->expressionEvaluator = $evaluator;
+    }
+
     /**
      * Interpolate {{field}} variables in text.
      * Supports dot-path and [] array notation.
@@ -124,6 +131,38 @@ class Label implements Component
      */
     private function interpolate(string $input): string
     {
+        // If the new expression evaluator is set, delegate to it
+        if ($this->expressionEvaluator !== null) {
+            return preg_replace_callback('/\{\{\s*(.+?)\s*\}\}/', function (array $matches): string {
+                $expression = $matches[1];
+
+                $resolveCallback = function (string $key): mixed {
+                    // Check local data first
+                    $value = $this->resolvePath($this->local_data, $key);
+                    if ($value !== null) {
+                        return $value;
+                    }
+                    // Then global data
+                    return $this->resolvePath($this->global_data, $key);
+                };
+
+                $result = $this->expressionEvaluator->evaluateExpression($expression, $resolveCallback);
+
+                // If evaluator returned empty and the original expression was a simple variable,
+                // keep the placeholder for unresolved variables
+                if ($result === '' && preg_match('/^[\w.\[\]]+$/', $expression)) {
+                    $value = $this->resolvePath($this->local_data, $expression)
+                        ?? $this->resolvePath($this->global_data, $expression);
+                    if ($value === null) {
+                        return $matches[0];
+                    }
+                }
+
+                return $result;
+            }, $input) ?? $input;
+        }
+
+        // Legacy path: regex-based resolution (unchanged)
         $result = preg_replace_callback('/\{\{\s*(\w+(?:\[\])?(?:\.\w+(?:\[\])?)*)\s*\}\}/', function (array $matches): string {
             $path = $matches[1];
 

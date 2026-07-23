@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Toolreport\Core\Layout;
 
+use Toolreport\Core\Expression\ExpressionEvaluator;
 use Toolreport\Core\Expression\ExpressionParser;
 use Toolreport\Core\Expression\FilterRegistry;
 
@@ -42,6 +43,19 @@ trait InterpolatesVariables
     private ?FilterRegistry $filterRegistry = null;
 
     /**
+     * Optional expression evaluator for the new pipeline.
+     */
+    private ?ExpressionEvaluator $expressionEvaluator = null;
+
+    /**
+     * Set the expression evaluator for the new pipeline.
+     */
+    public function setExpressionEvaluator(ExpressionEvaluator $evaluator): void
+    {
+        $this->expressionEvaluator = $evaluator;
+    }
+
+    /**
      * Get the filter registry, initializing with defaults on first access.
      */
     protected function getFilterRegistry(): FilterRegistry
@@ -68,6 +82,30 @@ trait InterpolatesVariables
      */
     protected function interpolate(string $text, array $data, array $localData = []): string
     {
+        // If the new expression evaluator is set, delegate to it
+        if ($this->expressionEvaluator !== null) {
+            return preg_replace_callback('/\{\{\s*(.+?)\s*\}\}/', function ($matches) use ($data, $localData) {
+                $expression = $matches[1];
+
+                $resolveCallback = function (string $key) use ($data, $localData): mixed {
+                    return $this->resolveVariableKey($key, $data, $localData);
+                };
+
+                $result = $this->expressionEvaluator->evaluateExpression($expression, $resolveCallback);
+
+                // Unresolved simple variables keep placeholder
+                if ($result === '' && preg_match('/^[\w.\[\]]+$/', trim($expression))) {
+                    $value = $this->resolveVariableKey(trim($expression), $data, $localData);
+                    if ($value === null) {
+                        return $matches[0];
+                    }
+                }
+
+                return $result;
+            }, $text) ?? $text;
+        }
+
+        // LEGACY: existing ExpressionParser path (unchanged)
         return preg_replace_callback('/\{\{\s*(.+?)\s*\}\}/', function ($matches) use ($data, $localData) {
             $expression = $matches[1];
 

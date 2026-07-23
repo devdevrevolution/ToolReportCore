@@ -15,6 +15,8 @@ use Toolreport\Core\Modules\PdfEngine\Exceptions\UnknownComponentException;
 use Toolreport\Core\Modules\PdfEngine\Primitives\Image;
 use Toolreport\Core\Modules\PdfEngine\Primitives\Label;
 use Toolreport\Core\Modules\PdfEngine\Primitives\Shape;
+use Toolreport\Core\Expression\ExpressionEvaluator;
+use Toolreport\Core\Expression\FunctionRegistry;
 
 class ReportCompiler
 {
@@ -26,6 +28,8 @@ class ReportCompiler
 
     private ?DebugAnnotation $debugAnnotation = null;
 
+    private ?ExpressionEvaluator $expressionEvaluator = null;
+
     public function __construct(
         private readonly ?Tcpdf $injected_pdf = null,
         private readonly ?FontMetrics $injected_font_metrics = null,
@@ -36,6 +40,7 @@ class ReportCompiler
     public function compile(array $config, array $data = []): string
     {
         $this->data = $data;
+        $this->expressionEvaluator = new ExpressionEvaluator(FunctionRegistry::defaults());
 
         $page_config = $config['page'] ?? $config;
         $page_width = (float) ($page_config['width'] ?? 210);
@@ -627,6 +632,10 @@ class ReportCompiler
 
         $label->setGlobalData($this->data);
         $label->setLocalData($local_data);
+
+        if ($this->expressionEvaluator !== null) {
+            $label->setExpressionEvaluator($this->expressionEvaluator);
+        }
 
         return $label;
     }
