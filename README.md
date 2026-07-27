@@ -212,6 +212,12 @@ Routes are auto-loaded by the service provider under the configured prefix (defa
 |--------|----------|-------------|
 | `GET` | `/health` | API health check |
 
+## Expression Functions
+
+ToolReport includes 30+ built-in functions for dynamic content: math, text, date, logic, and formatting. Use them inside labels with `{{ }}` syntax.
+
+📖 **[Full reference (English)](docs/functions.md)** · **[Referencia completa (Español)](docs/functions-es.md)**
+
 ## PDF Engines
 
 ToolReport Core supports two rendering engines:

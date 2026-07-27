@@ -614,6 +614,7 @@ composer test
 
 ## 16. Enlaces
 
+- [Funciones de expresión](functions-es.md) — referencia completa de funciones matemáticas, de texto, fechas y formato.
 - [README en inglés](../README.md) — referencia técnica completa y tabla de endpoints.
 - [Issues](https://github.com/toolreport/core/issues)
 - [Source](https://github.com/toolreport/core)
