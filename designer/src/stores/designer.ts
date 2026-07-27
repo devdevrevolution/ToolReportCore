@@ -264,6 +264,10 @@ interface DesignerState {
     discoveredFields: DiscoveredField[]
     /** Clipboard for copy/paste of composite elements */
     clipboard: ClipboardEntry | null
+    /** Component palette detached state */
+    paletteDetached: boolean
+    /** Floating palette position (viewport coords) */
+    palettePosition: { x: number; y: number }
 }
 
 // ── Defaults ──────────────────────────────────
@@ -816,6 +820,8 @@ export const useDesignerStore = defineStore('store/designer', {
         datasources: [],
         discoveredFields: [],
         clipboard: null,
+        paletteDetached: false,
+        palettePosition: { x: 20, y: 100 },
     }),
 
     getters: {
@@ -1089,6 +1095,20 @@ export const useDesignerStore = defineStore('store/designer', {
     },
 
     actions: {
+        // ── Palette ────────────────────────────────
+
+        togglePaletteDetached(): void {
+            this.paletteDetached = !this.paletteDetached
+        },
+
+        dockPalette(): void {
+            this.paletteDetached = false
+        },
+
+        setPalettePosition(position: { x: number; y: number }): void {
+            this.palettePosition = position
+        },
+
         // ── History ────────────────────────────────
 
         /**
@@ -2433,6 +2453,24 @@ export const useDesignerStore = defineStore('store/designer', {
                     patch.h = root.height
                     delete patch.width
                     delete patch.height
+                    // For line shapes, scale endpoints proportionally so the
+                    // line maintains its direction when the bounding box resizes.
+                    // A horizontal line must stay horizontal, diagonal stays diagonal.
+                    const shape = root.node as { shapeType?: string; x1?: number; y1?: number; x2?: number; y2?: number }
+                    if (shape.shapeType === 'line') {
+                        const origX1 = shape.x1 ?? 0
+                        const origY1 = shape.y1 ?? 0
+                        const origX2 = shape.x2 ?? origX1 + 40
+                        const origY2 = shape.y2 ?? origY1
+                        const origW = Math.abs(origX2 - origX1) || 0.001
+                        const origH = Math.abs(origY2 - origY1) || 0.001
+                        const sx = root.width / origW
+                        const sy = root.height / origH
+                        const dx = origX2 - origX1
+                        const dy = origY2 - origY1
+                        patch.x2 = origX1 + dx * sx
+                        patch.y2 = origY1 + dy * sy
+                    }
                 }
                 this.updateCompositeNode(root.node.id, patch as Partial<CompositeNode>)
             }
@@ -2497,10 +2535,21 @@ export const useDesignerStore = defineStore('store/designer', {
 
                     if (dimension === 'width') {
                         if (node.type === 'Shape') {
-                            const shape = node as { w?: number; h?: number; shapeType?: string }
+                            const shape = node as { w?: number; h?: number; shapeType?: string; x1?: number; y1?: number; x2?: number; y2?: number }
                             shape.w = clamped
                             if (shape.shapeType === 'circle') {
                                 shape.h = clamped
+                            }
+                            if (shape.shapeType === 'line') {
+                                // Scale x-component of line direction to new width
+                                const origX1 = shape.x1 ?? 0
+                                const origY1 = shape.y1 ?? 0
+                                const origX2 = shape.x2 ?? origX1 + 40
+                                const origY2 = shape.y2 ?? origY1
+                                const origW = Math.abs(origX2 - origX1) || 0.001
+                                const dx = origX2 - origX1
+                                shape.x2 = origX1 + dx * (clamped / origW)
+                                // y2 unchanged — preserves line direction
                             }
                         } else if (node.type === 'Image') {
                             const img = node as { width?: number; height?: number; shapeType?: string }
@@ -2517,10 +2566,21 @@ export const useDesignerStore = defineStore('store/designer', {
                         }
                     } else {
                         if (node.type === 'Shape') {
-                            const shape = node as { w?: number; h?: number; shapeType?: string }
+                            const shape = node as { w?: number; h?: number; shapeType?: string; x1?: number; y1?: number; x2?: number; y2?: number }
                             shape.h = clamped
                             if (shape.shapeType === 'circle') {
                                 shape.w = clamped
+                            }
+                            if (shape.shapeType === 'line') {
+                                // Scale y-component of line direction to new height
+                                const origX1 = shape.x1 ?? 0
+                                const origY1 = shape.y1 ?? 0
+                                const origX2 = shape.x2 ?? origX1 + 40
+                                const origY2 = shape.y2 ?? origY1
+                                const origH = Math.abs(origY2 - origY1) || 0.001
+                                const dy = origY2 - origY1
+                                shape.y2 = origY1 + dy * (clamped / origH)
+                                // x2 unchanged — preserves line direction
                             }
                         } else if (node.type === 'Image') {
                             const img = node as { width?: number; height?: number; shapeType?: string }

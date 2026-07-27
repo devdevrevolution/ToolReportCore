@@ -674,8 +674,8 @@ class ReportCompiler
         } elseif (isset($node['h'])) {
             $shape->setHeight((float) $node['h']);
         }
-        if (isset($node['color'])) {
-            $shape->setColor($node['color']);
+        if (isset($node['strokeColor'])) {
+            $shape->setColor($node['strokeColor']);
         }
         if (isset($node['fillColor'])) {
             $shape->setFillColor($node['fillColor']);

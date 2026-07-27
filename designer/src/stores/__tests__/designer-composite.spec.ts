@@ -172,6 +172,24 @@ describe('Composite hybrid model', () => {
             expect((root.node as HBoxNode).width).toBe(140)
             expect((root.node as HBoxNode).height).toBe(45)
         })
+
+        it('syncs x2/y2 when resizing a line Shape', () => {
+            const store = useDesignerStore()
+            const rootId = store.addCompositeNode('detail', 'Shape')
+            // Set as line with initial coords on the inner node
+            const root = store.page.bands!.find(b => b.id === 'detail')!.children![0] as CompositeRoot
+            store.updateCompositeNode(root.node.id, { shapeType: 'line', x1: 5, y1: 3, x2: 45, y2: 3 })
+
+            // Horizontal line: y2 should stay at 3 (not become 3+25=28)
+            store.resizeCompositeRoot(rootId, 0, 0, 80, 25)
+            const shape = root.node as ShapeNode
+            expect(shape.w).toBe(80)
+            expect(shape.h).toBe(25)
+            expect(shape.x1).toBe(5)
+            expect(shape.y1).toBe(3)
+            expect(shape.x2).toBe(85)  // x1 + scaled dx: 5 + (45-5)*(80/40) = 85
+            expect(shape.y2).toBe(3)   // unchanged — horizontal line stays horizontal
+        })
     })
 
     describe('removeCompositeNode', () => {

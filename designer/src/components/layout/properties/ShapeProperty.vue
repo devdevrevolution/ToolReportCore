@@ -25,6 +25,14 @@ const shapeType = computed({
             patch.w = currentW
             patch.h = currentW
         }
+        // Initialize line coordinates from current w when switching to line
+        if (newType === 'line') {
+            const currentW = props.node.w ?? 40
+            patch.x1 = 0
+            patch.y1 = 0
+            patch.x2 = currentW
+            patch.y2 = 0
+        }
         update(patch)
     },
 })
@@ -54,6 +62,45 @@ const shapeType = computed({
                 min="1"
                 @change="update({ w: Number(($event.target as HTMLInputElement).value), h: Number(($event.target as HTMLInputElement).value) })"
             />
+        </div>
+        <!-- Line: x1/y1/x2/y2 coordinates -->
+        <div v-if="props.node.shapeType === 'line'" class="grid grid-cols-2 gap-2">
+            <div>
+                <label class="mb-1 block text-xs font-medium text-gray-700">X1</label>
+                <input
+                    type="number"
+                    class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none"
+                    :value="props.node.x1 ?? 0"
+                    @change="update({ x1: Number(($event.target as HTMLInputElement).value) })"
+                />
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-medium text-gray-700">Y1</label>
+                <input
+                    type="number"
+                    class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none"
+                    :value="props.node.y1 ?? 0"
+                    @change="update({ y1: Number(($event.target as HTMLInputElement).value) })"
+                />
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-medium text-gray-700">X2</label>
+                <input
+                    type="number"
+                    class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none"
+                    :value="props.node.x2 ?? 40"
+                    @change="update({ x2: Number(($event.target as HTMLInputElement).value) })"
+                />
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-medium text-gray-700">Y2</label>
+                <input
+                    type="number"
+                    class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none"
+                    :value="props.node.y2 ?? 0"
+                    @change="update({ y2: Number(($event.target as HTMLInputElement).value) })"
+                />
+            </div>
         </div>
         <!-- Rect / Ellipse: W + H -->
         <div v-else-if="props.node.shapeType !== 'line'" class="grid grid-cols-2 gap-2">

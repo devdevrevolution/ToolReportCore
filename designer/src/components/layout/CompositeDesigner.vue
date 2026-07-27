@@ -59,6 +59,9 @@
             <CompositePropertiesPanel class="flex-shrink-0" />
         </div>
 
+        <!-- Floating palette (Teleports to body) -->
+        <FloatingPalette />
+
         <!-- Preview modal -->
         <PreviewModal
             v-if="showPreview"
@@ -89,6 +92,7 @@ import CompositeCanvas from '../canvas/CompositeCanvas.vue'
 import CompositePropertiesPanel from './CompositePropertiesPanel.vue'
 import PreviewModal from '../modals/PreviewModal.vue'
 import PageSetupModal from '../modals/PageSetupModal.vue'
+import FloatingPalette from './FloatingPalette.vue'
 
 // ── Props ──────────────────────────────────────
 

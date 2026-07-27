@@ -103,6 +103,29 @@
                         :min="1"
                     />
                 </div>
+                <!-- Line: x1/y1/x2/y2 coordinates -->
+                <div v-else-if="shape.shapeType === 'line'" class="mt-2 grid grid-cols-2 gap-2">
+                    <NumberInput
+                        label="X1"
+                        :model-value="shape.x1 ?? 0"
+                        @update:model-value="update({ x1: $event ?? 0 })"
+                    />
+                    <NumberInput
+                        label="Y1"
+                        :model-value="shape.y1 ?? 0"
+                        @update:model-value="update({ y1: $event ?? 0 })"
+                    />
+                    <NumberInput
+                        label="X2"
+                        :model-value="shape.x2 ?? 40"
+                        @update:model-value="update({ x2: $event ?? 40 })"
+                    />
+                    <NumberInput
+                        label="Y2"
+                        :model-value="shape.y2 ?? 0"
+                        @update:model-value="update({ y2: $event ?? 0 })"
+                    />
+                </div>
                 <!-- Rect / Ellipse: W + H -->
                 <div v-else-if="shape.shapeType !== 'line'" class="mt-2 grid grid-cols-2 gap-2">
                     <NumberInput
@@ -388,6 +411,15 @@ function updateShapeType(newType: string): void {
         const w = (shape.value as ShapeNode).w ?? 40
         patch.w = w
         patch.h = w
+    }
+
+    // When switching to line, initialize x1/y1/x2/y2 from current w/h
+    if (typed === 'line') {
+        const w = (shape.value as ShapeNode).w ?? 40
+        patch.x1 = 0
+        patch.y1 = 0
+        patch.x2 = w
+        patch.y2 = 0
     }
 
     update(patch as Partial<CompositeNode>)
