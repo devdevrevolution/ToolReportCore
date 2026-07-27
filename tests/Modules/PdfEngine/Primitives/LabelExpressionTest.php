@@ -37,9 +37,40 @@ class LabelExpressionTest extends TestCase
     private function resolvePath(array $data, string $path): mixed
     {
         $segments = explode('.', $path);
-        $current = $data;
+        return $this->resolveSegments($data, $segments);
+    }
 
-        foreach ($segments as $segment) {
+    private function resolveSegments(mixed $current, array $segments): mixed
+    {
+        while (count($segments) > 0) {
+            $segment = array_shift($segments);
+
+            if (str_ends_with($segment, '[]')) {
+                // Array iteration: resolve the base key, then iterate each element
+                $key = substr($segment, 0, -2);
+
+                if (!is_array($current) || !array_key_exists($key, $current)) {
+                    return null;
+                }
+
+                $items = $current[$key];
+                if (!is_array($items)) {
+                    return null;
+                }
+
+                // Resolve remaining segments for each array element
+                $results = [];
+                foreach (array_values($items) as $item) {
+                    $resolved = $this->resolveSegments($item, $segments);
+                    if ($resolved !== null) {
+                        $results[] = $resolved;
+                    }
+                }
+
+                return $results !== [] ? $results : null;
+            }
+
+            // Simple key lookup
             if (!is_array($current) || !array_key_exists($segment, $current)) {
                 return null;
             }
@@ -119,5 +150,49 @@ class LabelExpressionTest extends TestCase
     public function it_local_data_shadows_global(): void
     {
         $this->assertEquals('Local', $this->eval('name', ['name' => 'Global'], ['name' => 'Local']));
+    }
+
+    #[Test]
+    public function it_sums_array_field_with_bracket_notation(): void
+    {
+        $data = [
+            'items' => [
+                ['ki' => 10],
+                ['ki' => 20],
+                ['ki' => 30],
+            ],
+        ];
+
+        $this->assertEquals('60', $this->eval('SUM(items[].ki)', $data));
+    }
+
+    #[Test]
+    public function it_sums_nested_array_field(): void
+    {
+        $data = [
+            'order' => [
+                'items' => [
+                    ['price' => 100],
+                    ['price' => 200],
+                    ['price' => 150],
+                ],
+            ],
+        ];
+
+        $this->assertEquals('450', $this->eval('SUM(order.items[].price)', $data));
+    }
+
+    #[Test]
+    public function it_multiplies_and_sums(): void
+    {
+        $data = [
+            'items' => [
+                ['price' => 10, 'qty' => 2],
+                ['price' => 20, 'qty' => 3],
+            ],
+        ];
+
+        // SUM of prices: 10 + 20 = 30
+        $this->assertEquals('30', $this->eval('SUM(items[].price)', $data));
     }
 }

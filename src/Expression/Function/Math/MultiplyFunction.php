@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace Toolreport\Core\Expression\Function\Math;
 
 use Toolreport\Core\Expression\FunctionInterface;
+use Toolreport\Core\Expression\Trait\ParsesFormattedNumber;
 
 /**
  * MULTIPLY: Product of value × all params.
+ *
+ * Automatically parses formatted number strings (e.g., "1.234,56" → 1234.56).
  *
  * Usage: MULTIPLY(a, b) or MULTIPLY(value, 2, 3)
  */
 class MultiplyFunction implements FunctionInterface
 {
+    use ParsesFormattedNumber;
+
     public function name(): string
     {
         return 'MULTIPLY';
@@ -20,15 +25,17 @@ class MultiplyFunction implements FunctionInterface
 
     public function apply(mixed $value, array $params, callable $resolve): mixed
     {
-        if (!is_numeric($value)) {
+        $parsed = $this->parseToFloat($value);
+        if ($parsed === null) {
             return '';
         }
 
-        $result = (float) $value;
+        $result = $parsed;
 
         foreach ($params as $param) {
-            if (is_numeric($param)) {
-                $result *= (float) $param;
+            $parsed = $this->parseToFloat($param);
+            if ($parsed !== null) {
+                $result *= $parsed;
             }
         }
 

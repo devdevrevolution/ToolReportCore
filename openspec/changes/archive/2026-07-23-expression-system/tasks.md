@@ -115,7 +115,7 @@
 
 ## Phase 10: Frontend — TypeScript Parser
 
-- [ ] 10.1 Rewrite `designer/src/utils/expressionParser.ts` — new tokenizer + parser matching PHP grammar. Token types: `FUNCTION | VARIABLE | NUMBER | STRING | LPAREN | RPAREN | COMMA | OPERATOR | EOF`. AST node types: `FunctionCallNode | VariableNode | NumberLiteralNode | StringLiteralNode | BinaryOpNode | FilterChainNode`. Exports: `tokenize()`, `parse()`, `parseExpression()`, `buildExpression()` for round-trip. Preserve existing `hasPipeFilters()`, `hasConcatenationOp()`, `isQuotedLiteral()` helpers. (~350 lines)
+- [x] 10.1 Rewrite `designer/src/utils/expressionParser.ts` — new tokenizer + parser matching PHP grammar. Token types: `FUNCTION | VARIABLE | NUMBER | STRING | LPAREN | RPAREN | COMMA | OPERATOR | EOF`. AST node types: `FunctionCallNode | VariableNode | NumberLiteralNode | StringLiteralNode | BinaryOpNode | FilterChainNode`. Exports: `tokenize()`, `parse()`, `parseExpression()`, `buildExpression()` for round-trip. Preserve existing `hasPipeFilters()`, `hasConcatenationOp()`, `isQuotedLiteral()` helpers. (~350 lines)
 
 **Dependencies**: None (can be built in parallel with backend phases).
 
@@ -123,9 +123,9 @@
 
 ## Phase 11: Frontend — Function Metadata & UI Components
 
-- [ ] 11.1 Create `designer/src/utils/functionDefinitions.ts` — `FunctionDefinition` interface with name, category, signature, description, params. All 40 functions defined (14 math + 9 text + 3 date + 2 logic + 2 formatting + 10 legacy wrapped). `FUNCTION_DEFINITIONS` array, `getFunctionDefinition()`, `getFunctionsByCategory()`. (~250 lines)
-- [ ] 11.2 Create `designer/src/components/modals/FunctionsModal.vue` — modal with search input, categorized function list, click-to-insert. Props: `modelValue?: string`. Emits: `insert(functionText: string)`. Categories: Math, Text, Date, Logic, Formatting. Search filters by name/description. (~180 lines)
-- [ ] 11.3 Create `designer/src/components/inputs/ExpressionEditor.vue` — advanced editor with raw textarea mode, syntax preview showing `{{ }}` delimiters, "Insert Function" button opening FunctionsModal. Props: `modelValue: string`, `placeholder?: string`. Emits: `update:modelValue`. (~150 lines)
+- [x] 11.1 Create `designer/src/utils/functionDefinitions.ts` — `FunctionDefinition` interface with name, category, signature, description, params. All 40 functions defined (14 math + 9 text + 3 date + 2 logic + 2 formatting + 10 legacy wrapped). `FUNCTION_DEFINITIONS` array, `getFunctionDefinition()`, `getFunctionsByCategory()`. (~250 lines)
+- [x] 11.2 Create `designer/src/components/modals/FunctionsModal.vue` — modal with search input, categorized function list, click-to-insert. Props: `modelValue?: string`. Emits: `insert(functionText: string)`. Categories: Math, Text, Date, Logic, Formatting. Search filters by name/description. (~180 lines)
+- [x] 11.3 Create `designer/src/components/inputs/ExpressionEditor.vue` — advanced editor with raw textarea mode, syntax preview showing `{{ }}` delimiters, "Insert Function" button opening FunctionsModal. Props: `modelValue: string`, `placeholder?: string`. Emits: `update:modelValue`. (~150 lines)
 - [x] 11.4 Modify `designer/src/components/layout/CompositeNodeProperties.vue` — use ExpressionEditor for label text input instead of plain TextInput. Wire up expression builder integration. (~30 lines changed)
 
 **Dependencies**: Phase 10 (new parser types).

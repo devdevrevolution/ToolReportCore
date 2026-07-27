@@ -174,4 +174,16 @@ class EvaluatorTest extends TestCase
     {
         $this->assertEquals('[ABC] Widget', $this->eval("'[' + code + '] ' + name", ['code' => 'ABC', 'name' => 'Widget']));
     }
+
+    #[Test]
+    public function it_sums_array_literal_with_three_elements(): void
+    {
+        $this->assertEquals('8', $this->eval('SUM([1, 2, 5])'));
+    }
+
+    #[Test]
+    public function it_sums_array_literal_with_five_elements(): void
+    {
+        $this->assertEquals('15', $this->eval('SUM([1, 2, 3, 4, 5])'));
+    }
 }

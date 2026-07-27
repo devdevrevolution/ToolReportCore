@@ -1,0 +1,34 @@
+schema: spec-driven
+
+context: |
+  Tech stack: PHP 8.3+, Laravel 13+, Vue 3.5, TypeScript 5.7, Pinia 3, Tailwind CSS 4, Vite 6
+  Architecture: Laravel package (toolreport/core), Vue 3 library (designer/), dual PDF rendering (DomPDF + TCPDF composite)
+  Testing: PHPUnit 12 (backend, Unit + Feature), Vitest 3 (frontend)
+  Style: PSR-4 autoload (Toolreport\Core), conventional PHP formatting, vue-tsc strict mode
+  Package: Published Composer library with Laravel auto-discovery provider
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Identify affected modules/packages (backend src/ vs frontend designer/)
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows (especially PDF rendering pipeline)
+    - Document architecture decisions with rationale
+  tasks:
+    - Group tasks by phase (infrastructure, implementation, testing)
+    - Use hierarchical numbering (1.1, 1.2, etc.)
+    - Keep tasks small enough to complete in one session
+    - Separate backend (PHP/Laravel) and frontend (Vue/TS) work streams
+  apply:
+    - Follow PSR-4 namespacing and existing code patterns
+    - Load relevant skills: vue-3, tailwind-4, typescript for designer/ changes
+    - Load relevant skills: phpunit for backend test changes
+  verify:
+    - Run PHPUnit tests (vendor/bin/phpunit) for backend changes
+    - Run Vitest (cd designer && npm test) for frontend changes
+    - Compare implementation against every spec scenario
+  archive:
+    - Warn before merging destructive deltas (large removals)

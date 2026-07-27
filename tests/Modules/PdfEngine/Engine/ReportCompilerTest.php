@@ -1498,4 +1498,139 @@ class ReportCompilerTest extends TestCase
         // PDF y = 297 - 15 - 20 = 262
         $this->assertStringContainsString(' 15.000 262.000 50.000 20.000 re W n', $allContent);
     }
+
+    // ── Integration: PAGE_NUM and PAGE_COUNT variables ──
+
+    #[Test]
+    public function compile_resolves_page_num_and_page_count_in_any_band(): void
+    {
+        // Multi-page report: 10 items × 30mm, available ~277mm → 2 pages
+        // pageFooter band with Label using {{ PAGE_NUM }} and {{ PAGE_COUNT }}
+        // Each page should render the Label with resolved values
+        $fontMock = $this->createMock(\Com\Tecnick\Pdf\Font\Stack::class);
+        $fontMock->method('insert')->willReturn([
+            'out' => '/F1 1 Tf',
+            'size' => 10,
+            'ascent' => 700,
+            'descent' => -200,
+            'height' => 900,
+        ]);
+        $fontMock->method('getOrdArrWidth')->willReturn(50.0);
+
+        $pdf = $this->createMock(Tcpdf::class);
+        $pdf->font = $fontMock;
+        $pdf->pon = 0;
+
+        $graph = $this->createMock(Draw::class);
+        $page = $this->createMock(Page::class);
+        $pdf->graph = $graph;
+        $pdf->page = $page;
+
+        $pdf->expects($this->exactly(2))
+            ->method('addPage')
+            ->willReturn([]);
+
+        $pdf->method('getOutPDFString')->willReturn('%PDF-mock');
+        $page->method('addContent');
+        $pdf->method('toUnit')->willReturnArgument(0);
+
+        $textCalls = [];
+        $pdf->method('addTextCell')
+            ->willReturnCallback(function (string $txt, ...$rest) use (&$textCalls) {
+                $textCalls[] = $txt;
+            });
+
+        $report_compiler = new ReportCompiler($pdf);
+
+        $report_compiler->compile([
+            'page' => [
+                'width' => 210,
+                'height' => 297,
+                'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10],
+                'bands' => [
+                    [
+                        'type' => 'detail',
+                        'collectionPath' => 'items',
+                        'children' => [
+                            ['x' => 0, 'y' => 0, 'node' => ['type' => 'Shape', 'shapeType' => 'rect', 'width' => 50, 'height' => 30]],
+                        ],
+                    ],
+                    [
+                        'type' => 'pageFooter',
+                        'height' => 15,
+                        'children' => [
+                            ['x' => 0, 'y' => 0, 'node' => ['type' => 'Label', 'text' => 'Página {{ PAGE_NUM }} de {{ PAGE_COUNT }}']],
+                        ],
+                    ],
+                ],
+            ],
+        ], [
+            'items' => array_map(fn($i) => ['id' => $i], range(0, 9)),
+        ]);
+
+        // pageFooter Label renders on every page → should see both page numbers
+        $this->assertContains('Página 1 de 2', $textCalls, 'Page 1 should contain "Página 1 de 2", got: ' . implode(', ', $textCalls));
+        $this->assertContains('Página 2 de 2', $textCalls, 'Page 2 should contain "Página 2 de 2", got: ' . implode(', ', $textCalls));
+    }
+
+    #[Test]
+    public function compile_resolves_page_num_in_summary_band(): void
+    {
+        // Single-page report with summary band containing {{ PAGE_NUM }}
+        $fontMock = $this->createMock(\Com\Tecnick\Pdf\Font\Stack::class);
+        $fontMock->method('insert')->willReturn([
+            'out' => '/F1 1 Tf',
+            'size' => 10,
+            'ascent' => 700,
+            'descent' => -200,
+            'height' => 900,
+        ]);
+        $fontMock->method('getOrdArrWidth')->willReturn(50.0);
+
+        $pdf = $this->createMock(Tcpdf::class);
+        $pdf->font = $fontMock;
+        $pdf->pon = 0;
+
+        $graph = $this->createMock(Draw::class);
+        $page = $this->createMock(Page::class);
+        $pdf->graph = $graph;
+        $pdf->page = $page;
+
+        $pdf->method('getOutPDFString')->willReturn('%PDF-mock');
+        $page->method('addContent');
+        $pdf->method('toUnit')->willReturnArgument(0);
+
+        $textCalls = [];
+        $pdf->method('addTextCell')
+            ->willReturnCallback(function (string $txt, ...$rest) use (&$textCalls) {
+                $textCalls[] = $txt;
+            });
+
+        $report_compiler = new ReportCompiler($pdf);
+
+        $report_compiler->compile([
+            'page' => [
+                'width' => 210,
+                'height' => 297,
+                'margins' => ['top' => 10, 'right' => 10, 'bottom' => 10, 'left' => 10],
+                'bands' => [
+                    [
+                        'type' => 'detail',
+                        'children' => [
+                            ['x' => 0, 'y' => 0, 'node' => ['type' => 'Shape', 'shapeType' => 'rect', 'width' => 50, 'height' => 30]],
+                        ],
+                    ],
+                    [
+                        'type' => 'summary',
+                        'children' => [
+                            ['x' => 0, 'y' => 0, 'node' => ['type' => 'Label', 'text' => 'Página {{ PAGE_NUM }} de {{ PAGE_COUNT }}']],
+                        ],
+                    ],
+                ],
+            ],
+        ], []);
+
+        // Summary renders on last page only
+        $this->assertContains('Página 1 de 1', $textCalls, 'Summary should contain "Página 1 de 1", got: ' . implode(', ', $textCalls));
+    }
 }

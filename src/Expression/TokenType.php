@@ -13,6 +13,7 @@ enum TokenType: string
     case VARIABLE = 'VARIABLE';
     case NUMBER = 'NUMBER';
     case STRING = 'STRING';
+    case ARRAY = 'ARRAY';
     case LPAREN = 'LPAREN';
     case RPAREN = 'RPAREN';
     case COMMA = 'COMMA';

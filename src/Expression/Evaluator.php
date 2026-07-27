@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Toolreport\Core\Expression;
 
+use Toolreport\Core\Expression\Ast\ArrayLiteralNode;
 use Toolreport\Core\Expression\Ast\BinaryOpNode;
 use Toolreport\Core\Expression\Ast\ExpressionNode;
 use Toolreport\Core\Expression\Ast\FilterChainNode;
@@ -71,6 +72,11 @@ class Evaluator
     public function visitStringLiteral(StringLiteralNode $node): mixed
     {
         return $node->value;
+    }
+
+    public function visitArrayLiteral(ArrayLiteralNode $node): mixed
+    {
+        return $node->elements;
     }
 
     public function visitBinaryOp(BinaryOpNode $node): mixed

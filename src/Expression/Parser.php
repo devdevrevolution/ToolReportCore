@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Toolreport\Core\Expression;
 
+use Toolreport\Core\Expression\Ast\ArrayLiteralNode;
 use Toolreport\Core\Expression\Ast\BinaryOpNode;
 use Toolreport\Core\Expression\Ast\ExpressionNode;
 use Toolreport\Core\Expression\Ast\FilterApplication;
@@ -149,6 +150,14 @@ class Parser
             $token = $this->advance();
 
             return new StringLiteralNode($token->value);
+        }
+
+        // Array literal: [ element, element, ... ]
+        if ($this->peek()->type === TokenType::ARRAY) {
+            $token = $this->advance();
+            $elements = json_decode($token->value, true);
+
+            return new ArrayLiteralNode($elements ?? []);
         }
 
         // Function call: IDENTIFIER '(' argumentList? ')'

@@ -131,6 +131,7 @@ class FunctionRegistry
         // Formatting functions
         $registry->register(new Function\Formatting\FormatNumberFunction());
         $registry->register(new Function\Formatting\FormatCurrencyFunction());
+        $registry->register(new Function\Formatting\ParseNumberFunction());
 
         return $registry;
     }

@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace Toolreport\Core\Expression\Function\Math;
 
 use Toolreport\Core\Expression\FunctionInterface;
+use Toolreport\Core\Expression\Trait\ParsesFormattedNumber;
 
 /**
  * SUM: Flatten arrays and sum all numeric values.
+ *
+ * Automatically parses formatted number strings (e.g., "45.000.000" → 45000000).
  *
  * Usage: SUM(values[]) or SUM(a, b, c)
  */
 class SumFunction implements FunctionInterface
 {
+    use ParsesFormattedNumber;
+
     public function name(): string
     {
         return 'SUM';
@@ -40,27 +45,38 @@ class SumFunction implements FunctionInterface
             foreach ($value as $item) {
                 if (is_array($item)) {
                     foreach ($item as $v) {
-                        if (is_numeric($v)) {
-                            $numbers[] = (float) $v;
+                        $parsed = $this->parseToFloat($v);
+                        if ($parsed !== null) {
+                            $numbers[] = $parsed;
                         }
                     }
-                } elseif (is_numeric($item)) {
-                    $numbers[] = (float) $item;
+                } else {
+                    $parsed = $this->parseToFloat($item);
+                    if ($parsed !== null) {
+                        $numbers[] = $parsed;
+                    }
                 }
             }
-        } elseif (is_numeric($value)) {
-            $numbers[] = (float) $value;
+        } else {
+            $parsed = $this->parseToFloat($value);
+            if ($parsed !== null) {
+                $numbers[] = $parsed;
+            }
         }
 
         foreach ($params as $param) {
             if (is_array($param)) {
                 foreach ($param as $item) {
-                    if (is_numeric($item)) {
-                        $numbers[] = (float) $item;
+                    $parsed = $this->parseToFloat($item);
+                    if ($parsed !== null) {
+                        $numbers[] = $parsed;
                     }
                 }
-            } elseif (is_numeric($param)) {
-                $numbers[] = (float) $param;
+            } else {
+                $parsed = $this->parseToFloat($param);
+                if ($parsed !== null) {
+                    $numbers[] = $parsed;
+                }
             }
         }
 

@@ -21,8 +21,51 @@ class FormattingTest extends TestCase
     private function eval(string $expression, array $data = []): string
     {
         return $this->evaluator->evaluateExpression($expression, function (string $key) use ($data): mixed {
-            return $data[$key] ?? null;
+            return $this->resolvePath($data, $key);
         });
+    }
+
+    private function resolvePath(array $data, string $path): mixed
+    {
+        $segments = explode('.', $path);
+        return $this->resolveSegments($data, $segments);
+    }
+
+    private function resolveSegments(mixed $current, array $segments): mixed
+    {
+        while (count($segments) > 0) {
+            $segment = array_shift($segments);
+
+            if (str_ends_with($segment, '[]')) {
+                $key = substr($segment, 0, -2);
+
+                if (!is_array($current) || !array_key_exists($key, $current)) {
+                    return null;
+                }
+
+                $items = $current[$key];
+                if (!is_array($items)) {
+                    return null;
+                }
+
+                $results = [];
+                foreach (array_values($items) as $item) {
+                    $resolved = $this->resolveSegments($item, $segments);
+                    if ($resolved !== null) {
+                        $results[] = $resolved;
+                    }
+                }
+
+                return $results !== [] ? $results : null;
+            }
+
+            if (!is_array($current) || !array_key_exists($segment, $current)) {
+                return null;
+            }
+            $current = $current[$segment];
+        }
+
+        return $current;
     }
 
     #[Test]
@@ -85,5 +128,90 @@ class FormattingTest extends TestCase
     public function it_returns_empty_for_non_numeric_currency(): void
     {
         $this->assertEquals('', $this->eval('FORMAT_CURRENCY(amount)', ['amount' => 'not a number']));
+    }
+
+    #[Test]
+    public function it_parses_number_with_thousands_separator(): void
+    {
+        $this->assertEquals('45000000', $this->eval('PARSE_NUMBER("45.000.000")'));
+    }
+
+    #[Test]
+    public function it_parses_number_with_decimal_separator(): void
+    {
+        $this->assertEquals('1234.56', $this->eval('PARSE_NUMBER("1.234,56")'));
+    }
+
+    #[Test]
+    public function it_parses_number_with_both_separators(): void
+    {
+        $this->assertEquals('45000001.23', $this->eval('PARSE_NUMBER("45.000.001,23")'));
+    }
+
+    #[Test]
+    public function it_parses_plain_number(): void
+    {
+        $this->assertEquals('999', $this->eval('PARSE_NUMBER("999")'));
+    }
+
+    #[Test]
+    public function it_parses_number_with_only_decimal(): void
+    {
+        $this->assertEquals('100.5', $this->eval('PARSE_NUMBER("100,5")'));
+    }
+
+    #[Test]
+    public function it_parses_us_format_number(): void
+    {
+        $this->assertEquals('100.5', $this->eval('PARSE_NUMBER("100.5")'));
+    }
+
+    #[Test]
+    public function it_parses_numeric_value_directly(): void
+    {
+        $this->assertEquals('123', $this->eval('PARSE_NUMBER(123)'));
+    }
+
+    #[Test]
+    public function it_returns_empty_for_invalid_string(): void
+    {
+        $this->assertEquals('', $this->eval('PARSE_NUMBER("abc")'));
+    }
+
+    #[Test]
+    public function it_sums_formatted_numbers_automatically(): void
+    {
+        $data = [
+            'items' => [
+                ['ki' => '45.000.000'],
+                ['ki' => '30.500.000'],
+            ],
+        ];
+
+        $this->assertEquals('75500000', $this->eval('SUM(items[].ki)', $data));
+    }
+
+    #[Test]
+    public function it_multiplies_formatted_numbers_automatically(): void
+    {
+        $this->assertEquals('2469.12', $this->eval('MULTIPLY("1.234,56", 2)'));
+    }
+
+    #[Test]
+    public function it_divides_formatted_numbers_automatically(): void
+    {
+        $this->assertEquals('1234.56', $this->eval('DIVIDE("1.234,56", 1)'));
+    }
+
+    #[Test]
+    public function it_adds_formatted_numbers_automatically(): void
+    {
+        $this->assertEquals('2469.12', $this->eval('ADD("1.234,56", "1.234,56")'));
+    }
+
+    #[Test]
+    public function it_subtracts_formatted_numbers_automatically(): void
+    {
+        $this->assertEquals('0', $this->eval('SUBTRACT("1.234,56", "1.234,56")'));
     }
 }

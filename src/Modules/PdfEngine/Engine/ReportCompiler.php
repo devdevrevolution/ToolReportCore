@@ -30,6 +30,9 @@ class ReportCompiler
 
     private ?ExpressionEvaluator $expressionEvaluator = null;
 
+    /** @var array{PAGE_NUM: int, PAGE_COUNT: int} */
+    private array $pageContext = [];
+
     public function __construct(
         private readonly ?Tcpdf $injected_pdf = null,
         private readonly ?FontMetrics $injected_font_metrics = null,
@@ -130,6 +133,11 @@ class ReportCompiler
                 $this->pdf->addPage();
                 $this->pdf->page->enableAutoPageBreak(false);
             }
+
+            $this->pageContext = [
+                'PAGE_NUM'   => $page_idx + 1,
+                'PAGE_COUNT' => $total_pages,
+            ];
 
             $this->renderPage(
                 $page_idx,
@@ -630,7 +638,7 @@ class ReportCompiler
             $label->setMargin($node['margin']);
         }
 
-        $label->setGlobalData($this->data);
+        $label->setGlobalData(array_merge($this->data, $this->pageContext));
         $label->setLocalData($local_data);
 
         if ($this->expressionEvaluator !== null) {
