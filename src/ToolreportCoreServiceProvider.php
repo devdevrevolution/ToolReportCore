@@ -8,17 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Toolreport\Core\Console\Commands\GenerateCoreFontsCommand;
 use Toolreport\Core\Console\Commands\PdfDesignerInstallCommand;
-use Toolreport\Core\Layout\LayoutEngine;
-use Toolreport\Core\Layout\Renderers\BarcodeElementRenderer;
-use Toolreport\Core\Layout\Renderers\ContainerElementRenderer;
-use Toolreport\Core\Layout\Renderers\ImageElementRenderer;
-use Toolreport\Core\Layout\Renderers\LineElementRenderer;
-use Toolreport\Core\Layout\Renderers\PageNumberElementRenderer;
-use Toolreport\Core\Layout\Renderers\RectangleElementRenderer;
-use Toolreport\Core\Layout\Renderers\TableElementRenderer;
-use Toolreport\Core\Layout\Renderers\TextElementRenderer;
 use Toolreport\Core\Pdf\EngineSelector;
-use Toolreport\Core\Pdf\PdfGenerator;
 use Toolreport\Core\Modules\PdfEngine\Engine\ReportCompiler;
 
 class ToolreportCoreServiceProvider extends ServiceProvider
@@ -26,24 +16,6 @@ class ToolreportCoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/pdf-designer.php', 'pdf-designer');
-
-        $this->app->singleton(LayoutEngine::class, function () {
-            $engine = new LayoutEngine();
-            $engine->registerRenderers([
-                app(TextElementRenderer::class),
-                app(ImageElementRenderer::class),
-                app(TableElementRenderer::class),
-                app(LineElementRenderer::class),
-                app(RectangleElementRenderer::class),
-                app(BarcodeElementRenderer::class),
-                app(PageNumberElementRenderer::class),
-                app(ContainerElementRenderer::class),
-            ]);
-
-            return $engine;
-        });
-
-        $this->app->singleton(PdfGenerator::class);
 
         $this->app->singleton(EngineSelector::class);
 

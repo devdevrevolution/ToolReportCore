@@ -72,15 +72,7 @@ class PdfTemplate extends Model
      */
     public function isPdfEngine(): bool
     {
-        return $this->engine === 'pdf-engine';
-    }
-
-    /**
-     * Check if this template uses the default DomPDF engine.
-     */
-    public function isDomPdf(): bool
-    {
-        return ($this->engine ?? 'dompdf') === 'dompdf';
+        return true;
     }
 
     /**
@@ -147,7 +139,7 @@ class PdfTemplate extends Model
 
     /**
      * Get the full layout config combining page and children.
-     * This is what the LayoutEngine expects (coordinates relative to content area).
+     * Full layout config combining page and children.
      *
      * Handles three storage formats:
      * - v3 (current): children relative to Band (Y) and Content (X)
@@ -164,7 +156,7 @@ class PdfTemplate extends Model
         $bands = $this->page['bands'] ?? [];
         if (!empty($bands)) {
             // Band-based templates: keep bands intact, no flattened children
-            // The LayoutEngine will iterate bands with a currentY cursor
+            // The engine will iterate bands with a currentY cursor
             return [
                 'page' => $this->page,
                 'children' => [],

@@ -21,29 +21,6 @@ return [
         'path' => env('PDF_DESIGNER_STORAGE_PATH', 'pdf-documents'),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | DomPDF Configuration
-    |--------------------------------------------------------------------------
-    */
-    'dompdf' => [
-        'default_paper_size' => env('PDF_DESIGNER_PAPER_SIZE', 'a4'),
-        'default_orientation' => env('PDF_DESIGNER_ORIENTATION', 'portrait'),
-        'default_margins' => [
-            'top' => 10,
-            'right' => 10,
-            'bottom' => 10,
-            'left' => 10,
-        ],
-        'options' => [
-            'enable_remote' => env('PDF_DESIGNER_DOMPDF_ENABLE_REMOTE', true),
-            'isHtml5ParserEnabled' => true,
-            'isPhpEnabled' => false,
-            'isJavascriptEnabled' => false,
-            'isFontSubsettingEnabled' => true,
-            'defaultMediaType' => 'print',
-        ],
-    ],
 
     /*
     |--------------------------------------------------------------------------

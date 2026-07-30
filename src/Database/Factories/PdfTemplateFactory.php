@@ -17,7 +17,7 @@ class PdfTemplateFactory extends Factory
             'name' => fake()->sentence(3),
             'slug' => fake()->unique()->slug(3),
             'description' => fake()->paragraph(),
-            'engine' => 'dompdf',
+            'engine' => 'pdf-engine',
             'page' => [
                 'width' => 210,
                 'height' => 297,

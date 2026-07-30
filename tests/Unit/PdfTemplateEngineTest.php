@@ -11,11 +11,11 @@ use Toolreport\Core\Tests\TestCase;
 class PdfTemplateEngineTest extends TestCase
 {
     #[Test]
-    public function default_engine_is_dompdf(): void
+    public function default_engine_is_pdf_engine(): void
     {
         $template = PdfTemplate::factory()->create();
 
-        $this->assertEquals('dompdf', $template->engine);
+        $this->assertEquals('pdf-engine', $template->engine);
     }
 
     #[Test]
@@ -32,29 +32,5 @@ class PdfTemplateEngineTest extends TestCase
         $template = PdfTemplate::factory()->create(['engine' => 'pdf-engine']);
 
         $this->assertTrue($template->isPdfEngine());
-    }
-
-    #[Test]
-    public function isPdfEngine_returns_false_for_dompdf(): void
-    {
-        $template = PdfTemplate::factory()->create(['engine' => 'dompdf']);
-
-        $this->assertFalse($template->isPdfEngine());
-    }
-
-    #[Test]
-    public function isDomPdf_returns_true_for_dompdf(): void
-    {
-        $template = PdfTemplate::factory()->create(['engine' => 'dompdf']);
-
-        $this->assertTrue($template->isDomPdf());
-    }
-
-    #[Test]
-    public function isDomPdf_returns_false_for_pdf_engine(): void
-    {
-        $template = PdfTemplate::factory()->create(['engine' => 'pdf-engine']);
-
-        $this->assertFalse($template->isDomPdf());
     }
 }

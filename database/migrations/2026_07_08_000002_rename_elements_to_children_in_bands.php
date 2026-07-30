@@ -90,9 +90,6 @@ return new class () extends Migration {
                 continue;
             }
 
-            // Only revert bands that look like DOMPDF children (list of designer
-            // element dicts with a `type` and `x`/`y`). PDF-Engine CompositeRoot
-            // entries also have `node` — we leave those untouched on rollback.
             $changed = false;
             foreach ($bands as &$band) {
                 if (!is_array($band)) {
@@ -101,29 +98,9 @@ return new class () extends Migration {
                 if (!array_key_exists('children', $band)) {
                     continue;
                 }
-                $children = $band['children'];
-                if (!is_array($children)) {
-                    continue;
-                }
-
-                $isDomPdfSet = true;
-                foreach ($children as $child) {
-                    if (!is_array($child)) {
-                        $isDomPdfSet = false;
-                        break;
-                    }
-                    if (isset($child['node'])) {
-                        // CompositeRoot shape — leave alone.
-                        $isDomPdfSet = false;
-                        break;
-                    }
-                }
-
-                if ($isDomPdfSet) {
-                    $band['elements'] = $band['children'];
-                    unset($band['children']);
-                    $changed = true;
-                }
+                $band['elements'] = $band['children'];
+                unset($band['children']);
+                $changed = true;
             }
             unset($band);
 

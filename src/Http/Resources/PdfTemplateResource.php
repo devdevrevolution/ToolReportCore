@@ -47,7 +47,7 @@ class PdfTemplateResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'engine' => $this->engine ?? 'dompdf',
+            'engine' => $this->engine ?? 'pdf-engine',
             'page' => $page,
             'config' => $this->when(
                 $request->route()?->getActionMethod() !== 'index',

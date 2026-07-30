@@ -24,7 +24,6 @@ class TestCase extends OrchestraTestCase
     {
         return [
             ToolreportCoreServiceProvider::class,
-            \Barryvdh\DomPDF\ServiceProvider::class,
         ];
     }
 

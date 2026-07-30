@@ -2,13 +2,12 @@
 
 [📖 Documentación en Español](docs/es.md) · [English docs below](#requirements)
 
-PDF Designer for Laravel — template management, visual layout engine, and dual PDF rendering (DomPDF + TCPDF composite engine).
+PDF Designer for Laravel — template management, visual layout engine, and TCPDF composite PDF rendering.
 
 ## Requirements
 
 - PHP 8.3+
 - Laravel 13+
-- DomPDF (`barryvdh/laravel-dompdf`)
 - TCPDF composite engine (`tecnickcom/tc-lib-pdf`)
 
 ## Installation
@@ -218,14 +217,9 @@ ToolReport includes 30+ built-in functions for dynamic content: math, text, date
 
 📖 **[Full reference (English)](docs/functions.md)** · **[Referencia completa (Español)](docs/functions-es.md)**
 
-## PDF Engines
+## PDF Engine
 
-ToolReport Core supports two rendering engines:
-
-- **DomPDF** (default) — HTML-to-PDF rendering via `barryvdh/laravel-dompdf`. Good for simple layouts.
-- **PDF Engine** (TCPDF composite) — Component-based rendering via `tecnickcom/tc-lib-pdf`. Better for complex layouts with precise positioning.
-
-Set the engine per template via the `engine` field (`dompdf` or `pdf-engine`).
+ToolReport Core uses the **PDF Engine** (TCPDF composite) — component-based PDF rendering via `tecnickcom/tc-lib-pdf`. The visual designer uses a band-based layout with a composite node tree for precise positioning.
 
 ## Testing
 

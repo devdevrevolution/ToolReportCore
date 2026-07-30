@@ -25,7 +25,7 @@ class UpdatePdfTemplateRequest extends FormRequest
                 Rule::unique('pdf_templates', 'slug')->ignore($templateId),
             ],
             'description' => ['nullable', 'string', 'max:5000'],
-            'engine' => ['nullable', 'string', 'in:dompdf,pdf-engine'],
+            'engine' => ['nullable', 'string'],
             'page' => ['sometimes', 'required', 'array'],
             'page.width' => ['sometimes', 'required', 'numeric', 'min:10', 'max:1000'],
             'page.height' => ['sometimes', 'required', 'numeric', 'min:10', 'max:1000'],
@@ -56,25 +56,11 @@ class UpdatePdfTemplateRequest extends FormRequest
             'page.bands.*.children.*.id' => ['nullable', 'string', 'max:255'],
         ];
 
-        // Engine-specific child field validation
-        if ($this->input('engine') === 'pdf-engine') {
-            $rules['page.bands.*.children.*.x'] = ['nullable', 'numeric', 'min:0'];
-            $rules['page.bands.*.children.*.y'] = ['nullable', 'numeric', 'min:0'];
-            $rules['page.bands.*.children.*.width'] = ['nullable', 'numeric', 'min:0'];
-            $rules['page.bands.*.children.*.height'] = ['nullable', 'numeric', 'min:0'];
-            $rules['page.bands.*.children.*.node'] = ['nullable', 'array'];
-        } else {
-            $rules['page.bands.*.children.*.type'] = ['required', 'string', 'in:text,image,table,line,rectangle,barcode,page_number,container'];
-            $rules['page.bands.*.children.*.x'] = ['required', 'numeric', 'min:0'];
-            $rules['page.bands.*.children.*.y'] = ['required', 'numeric', 'min:0'];
-            $rules['page.bands.*.children.*.width'] = ['required', 'numeric', 'min:1'];
-            $rules['page.bands.*.children.*.height'] = ['required', 'numeric', 'min:1'];
-            $rules['page.bands.*.children.*.content'] = ['nullable', 'array'];
-            $rules['page.bands.*.children.*.styles'] = ['nullable', 'array'];
-            $rules['page.bands.*.children.*.locked'] = ['nullable', 'boolean'];
-            $rules['page.bands.*.children.*.visible'] = ['nullable', 'boolean'];
-            $rules['page.bands.*.children.*.rotation'] = ['nullable', 'numeric', 'min:0', 'max:360'];
-        }
+        $rules['page.bands.*.children.*.x'] = ['nullable', 'numeric', 'min:0'];
+        $rules['page.bands.*.children.*.y'] = ['nullable', 'numeric', 'min:0'];
+        $rules['page.bands.*.children.*.width'] = ['nullable', 'numeric', 'min:0'];
+        $rules['page.bands.*.children.*.height'] = ['nullable', 'numeric', 'min:0'];
+        $rules['page.bands.*.children.*.node'] = ['nullable', 'array'];
 
         $rules['config'] = ['nullable', 'array'];
         $rules['is_active'] = ['nullable', 'boolean'];

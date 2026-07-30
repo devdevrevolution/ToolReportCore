@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\ValidationException;
-use Toolreport\Core\Exceptions\InvalidLayoutException;
 use Toolreport\Core\Exceptions\PdfGenerationException;
 use Toolreport\Core\Http\Requests\GenerateCompositionRequest;
 use Toolreport\Core\Http\Resources\PdfDocumentResource;
@@ -67,12 +66,6 @@ class CompositionGeneratorController extends Controller
             return response()->json([
                 'message' => $e->getMessage(),
                 'errors' => $e->errors(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        } catch (InvalidLayoutException $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-                'errors' => ['layout' => [$e->getMessage()]],
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
 
         } catch (PdfGenerationException $e) {

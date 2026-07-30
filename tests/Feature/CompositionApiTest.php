@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Toolreport\Core\Tests\Feature;
 
-use Barryvdh\DomPDF\Facade\Pdf as DomPdf;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
@@ -370,19 +369,6 @@ class CompositionApiTest extends TestCase
     #[Test]
     public function it_generates_pdf_from_composition(): void
     {
-        DomPdf::shouldReceive('loadHtml')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setPaper')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setOptions')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('output')
-            ->once()
-            ->andReturn('%PDF-1.4 mock content');
-
         $template = PdfTemplate::factory()->create();
         $composition = ReportComposition::factory()->create();
         CompositionPage::factory()->create([
@@ -490,19 +476,6 @@ class CompositionApiTest extends TestCase
     #[Test]
     public function it_generates_with_empty_data_payload(): void
     {
-        DomPdf::shouldReceive('loadHtml')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setPaper')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setOptions')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('output')
-            ->once()
-            ->andReturn('%PDF-1.4 empty data');
-
         $template = PdfTemplate::factory()->create();
         $composition = ReportComposition::factory()->create();
         CompositionPage::factory()->create([
@@ -566,19 +539,6 @@ class CompositionApiTest extends TestCase
     #[Test]
     public function existing_template_generate_endpoint_still_works(): void
     {
-        DomPdf::shouldReceive('loadHtml')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setPaper')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setOptions')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('output')
-            ->once()
-            ->andReturn('%PDF-1.4 template test');
-
         $template = PdfTemplate::factory()->create();
 
         $response = $this->postJson("/api/pdf-designer/templates/{$template->id}/generate", [
@@ -609,22 +569,6 @@ class CompositionApiTest extends TestCase
                 ['cognome' => 'Bianchi', 'nome' => 'Luca'],
             ]),
         ]);
-
-        DomPdf::shouldReceive('loadHtml')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setPaper')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('setOptions')
-            ->once()
-            ->andReturnSelf();
-        DomPdf::shouldReceive('output')
-            ->once()
-            ->andReturn('%PDF-composition-datasources');
-
-        Storage::shouldReceive('disk')->once()->andReturnSelf();
-        Storage::shouldReceive('put')->once()->andReturn(true);
 
         $templateA = PdfTemplate::factory()->create([
             'is_active' => true,

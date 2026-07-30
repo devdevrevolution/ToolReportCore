@@ -144,18 +144,6 @@ class PdfTemplateApiTest extends TestCase
     }
 
     #[Test]
-    public function it_requires_valid_element_type()
-    {
-        $data = $this->validTemplateData;
-        $data['page']['bands'][1]['children'][0]['type'] = 'invalid_type';
-
-        $response = $this->postJson('/api/pdf-designer/templates', $data);
-
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['page.bands.1.children.0.type']);
-    }
-
-    #[Test]
     public function it_requires_valid_band_type()
     {
         $data = $this->validTemplateData;
@@ -177,18 +165,6 @@ class PdfTemplateApiTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['page.bands.0.anchor']);
-    }
-
-    #[Test]
-    public function it_requires_valid_element_fields_in_band()
-    {
-        $data = $this->validTemplateData;
-        unset($data['page']['bands'][1]['children'][0]['x']);
-
-        $response = $this->postJson('/api/pdf-designer/templates', $data);
-
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['page.bands.1.children.0.x']);
     }
 
     #[Test]

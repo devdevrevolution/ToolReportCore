@@ -810,17 +810,6 @@ describe('Composite hybrid model', () => {
             expect(store.pasteCompositeRoot('detail')).toBeNull()
         })
 
-        it('returns null on engine mismatch', () => {
-            const store = useDesignerStore()
-            store.engine = 'pdf-engine'
-            const rootId = store.addCompositeNode('detail', 'Label')
-            store.copyCompositeRoot(rootId)
-
-            // Switch engine
-            store.engine = 'dompdf'
-            expect(store.pasteCompositeRoot('detail')).toBeNull()
-        })
-
         it('generates fresh UUIDs for the pasted element', () => {
             const store = useDesignerStore()
             store.engine = 'pdf-engine'
@@ -897,14 +886,13 @@ describe('Composite hybrid model', () => {
             expect(store.hasCompatibleClipboard).toBe(true)
         })
 
-        it('returns false when engine mismatch', () => {
+        it('returns true when clipboard is fresh', () => {
             const store = useDesignerStore()
             store.engine = 'pdf-engine'
             const rootId = store.addCompositeNode('detail', 'Label')
             store.copyCompositeRoot(rootId)
-            store.engine = 'dompdf'
 
-            expect(store.hasCompatibleClipboard).toBe(false)
+            expect(store.hasCompatibleClipboard).toBe(true)
         })
 
         it('returns false when clipboard is empty', () => {

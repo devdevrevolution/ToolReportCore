@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Toolreport\Core\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Toolreport\Core\DataTransferObjects\LayoutResult;
 use Toolreport\Core\Models\PdfDocument;
 use Toolreport\Core\Models\PdfTemplate;
 use Toolreport\Core\Models\ReportComposition;

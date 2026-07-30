@@ -170,8 +170,6 @@ export interface DesignerPage {
     }
     /** Report bands (sections) within the page — optional for backward compat */
     bands?: ReportBand[]
-    /** Layout mode discriminator — 'bands-absolute' for DomPDF, 'bands-composite' for PdfEngine */
-    layoutType?: LayoutType
 }
 
 // ── Composite node types ──────────────────────
@@ -312,9 +310,9 @@ export interface CompositeRoot {
     node: CompositeNode
 }
 
-export type LayoutType = 'bands-absolute' | 'bands-composite'
+export type LayoutType = 'bands-composite'
 
-/** A positioned child inside a band — simple designer element (dompdf) or composite node root (pdf-engine) */
+/** A positioned child inside a band — a composite node root. */
 export type BandChild = DesignerElement | CompositeRoot
 
 // ── Band (report section) types ─────────────────
@@ -369,17 +367,9 @@ export interface ReportBand {
      */
     summaryPosition?: 'afterDetail' | 'pageBottom'
     /**
-     * Positioned children within this band.
-     * - dompdf engine: simple DesignerElement[]
-     * - pdf-engine: CompositeRoot[]
+     * Positioned children within this band — composite node roots.
      */
     children: BandChild[]
-    /**
-     * Composite node tree (pdf-engine mode, LEGACY shape) — single root
-     * node for the band content. Auto-migrated to `children` on load by
-     * the store. Kept for backward compatibility with saved templates.
-     */
-    content?: CompositeNode
 }
 
 // ── Datasource types ───────────────────────────

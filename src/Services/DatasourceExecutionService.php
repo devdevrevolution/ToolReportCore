@@ -30,7 +30,7 @@ class DatasourceExecutionService
      *     collectionPath?: string|null,
      * }>  $datasources
      * @param  array<string, string>  $resolvedVars  Resolved env_vars for {{var}} interpolation
-     * @return array<string, mixed>  Merged data for the LayoutEngine
+     * @return array<string, mixed>  Merged data for rendering
      */
     public function execute(array $datasources, array $resolvedVars = []): array
     {

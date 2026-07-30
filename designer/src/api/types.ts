@@ -48,7 +48,7 @@ export interface PdfTemplate {
     page: Record<string, unknown>
     config: Record<string, unknown>
     is_active: boolean
-    engine?: 'dompdf' | 'pdf-engine'
+    engine?: string
     element_count: number
     created_at: string
     updated_at: string
@@ -75,7 +75,7 @@ export interface CreateTemplatePayload {
     page: Record<string, unknown>
     config: Record<string, unknown>
     is_active?: boolean
-    engine?: 'dompdf' | 'pdf-engine'
+    engine?: string
 }
 
 /** Payload for updating a template (partial) */

@@ -13,9 +13,9 @@ class PdfGenerationException extends Exception
         return new self("PDF generation failed during rendering: {$message}.");
     }
 
-    public static function domPdfError(string $message): self
+    public static function generationError(string $message): self
     {
-        return new self("PDF generation failed: DomPDF error: {$message}.");
+        return new self("PDF generation failed: {$message}.");
     }
 
     public static function storageError(string $message): self

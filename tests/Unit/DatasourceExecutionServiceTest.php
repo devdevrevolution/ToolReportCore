@@ -241,7 +241,7 @@ class DatasourceExecutionServiceTest extends TestCase
         ]);
 
         // Without collectionPath, the entire response is merged as-is
-        // preserving collections and nested objects for the LayoutEngine to resolve
+        // preserving collections and nested objects for rendering
         $result = $this->service->executeForRendering([
             [
                 'id' => 'ds-1',

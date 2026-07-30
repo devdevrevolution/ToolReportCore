@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pdf_templates', function (Blueprint $table) {
-            $table->string('engine')->default('dompdf');
+            $table->string('engine')->default('pdf-engine');
         });
     }
 

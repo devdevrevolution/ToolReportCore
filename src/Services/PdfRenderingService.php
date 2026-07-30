@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Toolreport\Core\Services;
 
 use Illuminate\Validation\ValidationException;
-use Toolreport\Core\DataTransferObjects\LayoutResult;
-use Toolreport\Core\Exceptions\InvalidLayoutException;
 use Toolreport\Core\Exceptions\PdfGenerationException;
-use Toolreport\Core\Layout\LayoutEngine;
 use Toolreport\Core\Models\PdfDocument;
 use Toolreport\Core\Models\PdfTemplate;
 use Toolreport\Core\Models\ReportComposition;
@@ -18,7 +15,6 @@ use Toolreport\Core\Pdf\PdfGenerator;
 class PdfRenderingService
 {
     public function __construct(
-        private readonly LayoutEngine $layoutEngine,
         private readonly PdfGenerator $pdfGenerator,
         private readonly DatasourceExecutionService $datasourceExecutionService,
         private readonly EngineSelector $engineSelector,
@@ -74,18 +70,9 @@ class PdfRenderingService
         $fullConfig = $template->getFullConfig();
         $resolvedData = $this->resolveData($data, $template, $fullConfig);
 
-        $engine = $template->engine ?? 'dompdf';
+        $pdfBinary = $this->engineSelector->render($template, $resolvedData);
 
-        if ($engine === 'pdf-engine') {
-            $pdfBinary = $this->engineSelector->render($template, $resolvedData);
-
-            return $this->pdfGenerator->saveBinary($template, $pdfBinary, $title, $resolvedData);
-        }
-
-        // Default dompdf path — existing flow
-        $layout = $this->layoutEngine->render($fullConfig, $resolvedData, $title);
-
-        return $this->pdfGenerator->generateFromLayout($template, $layout, $resolvedData);
+        return $this->pdfGenerator->saveBinary($template, $pdfBinary, $title, $resolvedData);
     }
 
     /**
@@ -142,68 +129,7 @@ class PdfRenderingService
     {
         $this->validateCompositionPages($composition);
 
-        // Determine if all pages use the same engine
-        $allDomPdf = $composition->pages->every(
-            fn ($page) => ($page->template->engine ?? 'dompdf') === 'dompdf',
-        );
-
-        $allPdfEngine = $composition->pages->every(
-            fn ($page) => ($page->template->engine ?? 'dompdf') === 'pdf-engine',
-        );
-
-        if (!$allDomPdf && !$allPdfEngine) {
-            throw ValidationException::withMessages([
-                'composition' => ['No se admiten motores mixtos en una composición. Todas las páginas deben usar el mismo motor.'],
-            ]);
-        }
-
-        if ($allPdfEngine) {
-            return $this->renderCompositionWithPdfEngine($composition, $data, $title);
-        }
-
-        return $this->renderCompositionWithDomPdf($composition, $data, $title);
-    }
-
-    /**
-     * Render a composition using the default DomPDF engine for all pages.
-     *
-     * @param  array<string, mixed>  $data
-     * @return PdfDocument
-     * @throws ValidationException
-     */
-    private function renderCompositionWithDomPdf(ReportComposition $composition, array $data, ?string $title = null): PdfDocument
-    {
-        /** @var LayoutResult[] $layoutResults */
-        $layoutResults = [];
-
-        foreach ($composition->pages as $page) {
-            if ($page->template === null) {
-                continue;
-            }
-
-            $fullConfig = $page->template->getFullConfig();
-            $resolvedData = $this->resolveData($data, $page->template, $fullConfig);
-            $pageTitle = $title ?? $page->template->name;
-
-            try {
-                $layoutResults[] = $this->layoutEngine->render($fullConfig, $resolvedData, $pageTitle);
-            } catch (InvalidLayoutException $e) {
-                throw ValidationException::withMessages([
-                    'pages' => [
-                        "La plantilla '{$page->template->name}' no cabe en la página de la composición: " .
-                        $e->getMessage(),
-                    ],
-                ]);
-            }
-        }
-
-        if (empty($layoutResults)) {
-            throw ValidationException::withMessages([
-                'composition' => ['No se pudieron renderizar las páginas de la composición.'],
-            ]);
-        }
-
-        return $this->pdfGenerator->generateFromComposition($composition, $layoutResults, $data);
+        return $this->renderCompositionWithPdfEngine($composition, $data, $title);
     }
 
     /**
